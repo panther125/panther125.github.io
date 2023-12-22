@@ -1,0 +1,231 @@
+<!DOCTYPE html><html lang="zh_CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Gin 琴酒 - 记录学习</title><meta name="keywords" content="Gin"><meta name="author" content="panther"><meta name="copyright" content="panther"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="黄沙百战穿金甲，不破楼兰终不还。"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://oss.gincode.icu/page/5/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":500,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Gin 琴酒',
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2023-12-22 17:01:48'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="https://widget.heweather.net/simple/static/css/he-simple.css?v=1.4.0" media="defer" onload="this.media='all'"><svg aria-hidden="true" style="position:absolute; overflow:hidden; width:0; height:0"><symbol id="icon-sun" viewBox="0 0 1024 1024"><path d="M960 512l-128 128v192h-192l-128 128-128-128H192v-192l-128-128 128-128V192h192l128-128 128 128h192v192z" fill="#FFD878" p-id="8420"></path><path d="M736 512a224 224 0 1 0-448 0 224 224 0 1 0 448 0z" fill="#FFE4A9" p-id="8421"></path><path d="M512 109.248L626.752 224H800v173.248L914.752 512 800 626.752V800h-173.248L512 914.752 397.248 800H224v-173.248L109.248 512 224 397.248V224h173.248L512 109.248M512 64l-128 128H192v192l-128 128 128 128v192h192l128 128 128-128h192v-192l128-128-128-128V192h-192l-128-128z" fill="#4D5152" p-id="8422"></path><path d="M512 320c105.888 0 192 86.112 192 192s-86.112 192-192 192-192-86.112-192-192 86.112-192 192-192m0-32a224 224 0 1 0 0 448 224 224 0 0 0 0-448z" fill="#4D5152" p-id="8423"></path></symbol><symbol id="icon-moon" viewBox="0 0 1024 1024"><path d="M611.370667 167.082667a445.013333 445.013333 0 0 1-38.4 161.834666 477.824 477.824 0 0 1-244.736 244.394667 445.141333 445.141333 0 0 1-161.109334 38.058667 85.077333 85.077333 0 0 0-65.066666 135.722666A462.08 462.08 0 1 0 747.093333 102.058667a85.077333 85.077333 0 0 0-135.722666 65.024z" fill="#FFB531" p-id="11345"></path><path d="M329.728 274.133333l35.157333-35.157333a21.333333 21.333333 0 1 0-30.165333-30.165333l-35.157333 35.157333-35.114667-35.157333a21.333333 21.333333 0 0 0-30.165333 30.165333l35.114666 35.157333-35.114666 35.157334a21.333333 21.333333 0 1 0 30.165333 30.165333l35.114667-35.157333 35.157333 35.157333a21.333333 21.333333 0 1 0 30.165333-30.165333z" fill="#030835" p-id="11346"></path></symbol></svg><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@1.0.17/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@1.0.17/lib/assets/carousel-touch.js"></script><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-categories-card@1.0.0/lib/categorybar.css"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="scarecrow"><div class="scarecrow__hat"><div class="scarecrow__ribbon"></div></div><div class="scarecrow__head"><div class="scarecrow__eye"></div><div class="scarecrow__eye"></div><div class="scarecrow__mouth"></div><div class="scarecrow__pipe"></div></div><div class="scarecrow__body"><div class="scarecrow__glove scarecrow__glove--l"></div><div class="scarecrow__sleeve scarecrow__sleeve--l"></div><div class="scarecrow__bow"></div><div class="scarecrow__shirt"></div><div class="scarecrow__coat"></div><div class="scarecrow__waistcoat"></div><div class="scarecrow__sleeve scarecrow__sleeve--r"></div><div class="scarecrow__glove scarecrow__glove--r"></div><div class="scarecrow__coattails"></div><div class="scarecrow__pants"></div></div><div class="scarecrow__arms"></div><div class="scarecrow__leg">  </div></div></div><div id="web_bg"></div><div id="an_music_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://pic.imgdb.cn/item/64baa3da1ddac507ccec0e8f.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">42</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw icon-renzheng"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw icon-yuan_feidie"></i><span> 足迹</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fa-solid fa-box-archive"></i><span> 时间轴</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa-solid fa-list-check"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw icon-zhihangshu"></i><span> List</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/essay/"><i class="fa-fw icon-yuan_shouyinji"></i><span> 即刻短文</span></a></li><li><a class="site-page child" href="/video/"><i class="fa-fw icon-yuan_mianwan"></i><span> 视频</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw icon-yuan_shouyinji"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/world/"><i class="fa-fw icon-yuan_feidie"></i><span> 读世界</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw icon-yuan_xinfeng-17"></i><span> Link</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header"><div class="menu-container" id="menu-container"><div class="menu-item"><div class="menu-item-main"><a class="site-page faa-parent animated-hover" href="/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-renzheng"></use></svg><span> 主页</span></a></div><div class="menu-item-main has-child"><div class="menu-item-parent"><a class="site-page faa-parent animated-hover" href="javascript:void(0);"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-yuan_feidie"></use></svg><span> 足迹</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/archives/"><i class="fa-fw fa-solid fa-box-archive faa-tada"></i><span> 时间轴</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/tags/"><i class="fa-fw fa-solid fa-list-check faa-tada"></i><span> 标签</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open faa-tada"></i><span> 分类</span></a></div></div><div class="menu-item-main has-child"><div class="menu-item-parent"><a class="site-page faa-parent animated-hover" href="javascript:void(0);"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-zhihangshu"></use></svg><span> List</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/essay/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-yuan_shouyinji"></use></svg><span> 即刻短文</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/video/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-yuan_mianwan"></use></svg><span> 视频</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/music/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-yuan_shouyinji"></use></svg><span> 音乐</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/world/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-yuan_feidie"></use></svg><span> 读世界</span></a></div></div><div class="menu-item-main"><a class="site-page faa-parent animated-hover" href="/link/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-yuan_xinfeng-17"></use></svg><span> Link</span></a></div></div><div class="top-bar"><div class="message-container"><div class="message-item message-weather" onclick="btf.scrollToDest(0, 500)"><div class="message-weather-box" id="he-plugin-simple"></div></div><div class="message-item message-date" onclick="Navvisible()"><div class="message-date-box" id="message-date-box"></div><div class="message-title-box" id="message-title-box"><a id="site-name" title="欢迎光临，愿你有愉快的一天">分类</a></div></div><div class="message-item message-function"><div id="search-button"><a class="site-page social-icon search faa-parent animated-hover"><svg class="faa-tada icon" style="height:25px;width:25px" aria-hidden="true"><use xlink:href="#icon-yuan_kejian"></use></svg><span> Search</span></a></div><a class="icon-V hidden faa-parent animated-hover" onclick="switchNightMode()" title="Toggle Between Light And Dark Mode"><svg class="faa-tada" width="25" height="25" viewBox="0 0 1024 1024"><use id="modeicon" xlink:href="#icon-moon"></use></svg></a><div id="toggle-menu"><a class="site-page faa-parent animated-hover"><svg class="faa-tada icon" style="height:25px;width:25px" aria-hidden="true"><use xlink:href="#icon-multi-window-01"></use></svg></a></div></div></div></div><button class="active-button" onclick="Navvisible()"></button></div><div id="site-info"><h1 id="site-title">Gin 琴酒</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="https://github.com/panther125" target="_blank" title="Github"><i class="fa-fw fa-brands fa-github-alt"></i></a><a class="social-icon" href="/2392189963@qq.com" target="_blank" title="Email"><i class="fa-fw fa-solid fa-envelope"></i></a><a class="social-icon" href="https://space.bilibili.com/322993153" target="_blank" title="Bilibili"><i class="fa-fw fa-brands fa-bilibili"></i></a><a class="social-icon" href="https://weibo.com/u/6401692308" target="_blank" title="weibo"><i class="fa-fw fa-brands fa-weibo"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="bbTimeList container" id="bbTimeList"><i class="bber-logo iconfont icon-bblogo icon-yuan_shuji" title="即刻短文" style="font-size: 2rem;"></i><div class="swiper-container swiper-no-swiping" id="bbtalk" tabindex="-1"><div class="swiper-wrapper" id="bber-talk"><div class="li-style swiper-slide">就算荧光棒成了拐杖，他也依旧是我的信仰。</div><div class="li-style swiper-slide">当灵魂剥离肉身的一瞬间，你选择仰望天堂，还是回望人间。</div><div class="li-style swiper-slide">喧嚣有时，寂静有时。 繁华有时，贫瘠有时。 激情有时，惆怅有时。 人生海海，汝如尔尔。</div><div class="li-style swiper-slide">怪不得有人说青春是轰轰烈烈，轰轰烈烈这四个字一听就是团伙作案。</div><div class="li-style swiper-slide">人生是一场单程的旅行，即使有些遗憾，我们也没有从头再来的机会。与其纠结无法改变的过去，不如笑着去接受未来。</div><div class="li-style swiper-slide">突然很喜欢惊鸿一瞥这个词，一见钟情太敷衍，日久生情太苍白，我只偷偷看你一眼就觉得世界值得！</div><div class="li-style swiper-slide">I have walked the silver plains and fished the rivers grass. the land knows me,our time is now,break their lines, Ionia stills Ionia calls;</div><div class="li-style swiper-slide">我要是没读过书📕该多好，这样我就能心安理得的去工厂打螺丝，可遗憾的是我读过。</div><div class="li-style swiper-slide">历史的车轮在一曲送别之后依旧缓缓的前进着。</div><div class="li-style swiper-slide">你们要去哪啊，从现在开始，我们不顺路了哦。</div></div></div><i class="bber-gotobb fas fa-arrow-circle-right" title="查看全文"></i></div><script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js" data-pjax=""></script><div class="recent-post-item"><div class="post_cover left"><a href="/2022/07/29/computer-science/java/spring5/spring5Text1/" title="spring简单使用"><img class="post_bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd04.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="spring简单使用"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/07/29/computer-science/java/spring5/spring5Text1/" title="spring简单使用">spring简单使用</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-07-28T16:00:00.000Z" title="Created 2022-07-29 00:00:00">2022-07-29</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/java%E6%A1%86%E6%9E%B6/">java框架</a></span></div><div class="content">了解Spring
+Spring 是轻量级的开源的 JavaEE 框架
+Spring 可以解决企业应用开发的复杂性
+Spring 有两个核心部分：IOC 和 Aop
+
+
+IOC：控制反转，把创建对象过程交给 Spring 进行管理
+Aop：面向切面，不修改源代码进行功能增强
+
+
+Spring 特点
+
+
+方便解耦，简化开发
+Aop 编程支持
+方便程序测试
+方便和其他框架进行整合
+方便进行事务操作
+降低 API 开发难度IOC（控制反转）
+
+
+什么是 IOC
+控制反转，把对象创建和对象之间的调用过程，交给 Spring 进行管理
+使用 IOC 目的：为了耦合度降低
+做入门案例就是 IOC 实现
+
+
+IOC 底层原理
+xml 解析
+工厂模式
+反射IOC简单demo
+
+
+
+xml配置1&lt;bean id = &quot;userDAO&quot; class = &quot;Gin.panther.Spring.UserDAO&quot;&gt;&lt;/bean&gt;
+创建工厂类1234567class Factory&#123;    public static UserDAO get ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/07/29/computer-science/java/spring5/SpringText3/" title="springAop"><img class="post_bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd07.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="springAop"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/07/29/computer-science/java/spring5/SpringText3/" title="springAop">springAop</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-07-28T16:00:00.000Z" title="Created 2022-07-29 00:00:00">2022-07-29</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/java%E6%A1%86%E6%9E%B6/">java框架</a></span></div><div class="content">AOP（面向切面编程）
+什么是 AOP
+
+
+面向切面编程（方面），利用 AOP 可以对业务逻辑的各个部分进行隔离，从而使得业务逻辑各部分之间的耦合度降低，提高程序的可重用性，同时提高了开发的效率。
+通俗描述：不通过修改源代码方式，在主干功能里面添加新功能
+
+
+AOP 底层使用动态代理
+
+
+有两种情况动态代理第一种 有接口情况，使用 JDK 动态代理⚫ 创建接口实现类代理对象，增强类的方法JDK动态代理
+
+1234567891011121314151617181920212223class InvocationHandlerImpl implements InvocationHandler &#123;    private Object obj;    InvocationHandlerImpl(Object obj)&#123;        this.obj = obj;    &#125;    // 增强逻辑    @Override    public Object invoke(Object proxy, Method method, Object[] args) thro ...</div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/4/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/#content-inner">4</a><span class="page-number current">5</span></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://pic.imgdb.cn/item/64baa3da1ddac507ccec0e8f.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">panther</div><div class="widget widget_block card shadow-sm bg-white border-0"><p><a href="https://gincode.icu/world" target="_self" rel="noopener">   <img class="za" decoding="async" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://pic.imgdb.cn/item/641295a0ebf10e5d5324e7a1.png" alt="60秒懂世界" title="60秒懂世界"/></a></p></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">42</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/panther125"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/panther125" target="_blank" title="Github"><i class="fa-fw fa-brands fa-github-alt"></i></a><a class="social-icon" href="/2392189963@qq.com" target="_blank" title="Email"><i class="fa-fw fa-solid fa-envelope"></i></a><a class="social-icon" href="https://space.bilibili.com/322993153" target="_blank" title="Bilibili"><i class="fa-fw fa-brands fa-bilibili"></i></a><a class="social-icon" href="https://weibo.com/u/6401692308" target="_blank" title="weibo"><i class="fa-fw fa-brands fa-weibo"></i></a></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/12/20/computer-science/java/UtilTools/redis/redisslave/" title="Redis 主从复制"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd11.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Redis 主从复制"/></a><div class="content"><a class="title" href="/2023/12/20/computer-science/java/UtilTools/redis/redisslave/" title="Redis 主从复制">Redis 主从复制</a><time datetime="2023-12-20T07:21:51.000Z" title="Created 2023-12-20 15:21:51">2023-12-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/12/11/ArrayList/JMH/" title="JMH - Java 代码性能测试"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd18.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="JMH - Java 代码性能测试"/></a><div class="content"><a class="title" href="/2023/12/11/ArrayList/JMH/" title="JMH - Java 代码性能测试">JMH - Java 代码性能测试</a><time datetime="2023-12-11T07:21:51.000Z" title="Created 2023-12-11 15:21:51">2023-12-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/12/07/ArrayList/VirtualThread/" title="虚拟线程"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd17.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="虚拟线程"/></a><div class="content"><a class="title" href="/2023/12/07/ArrayList/VirtualThread/" title="虚拟线程">虚拟线程</a><time datetime="2023-12-07T07:21:51.000Z" title="Created 2023-12-07 15:21:51">2023-12-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/11/26/computer-science/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/nowcode3/" title="新生赛"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd15.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="新生赛"/></a><div class="content"><a class="title" href="/2023/11/26/computer-science/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/nowcode3/" title="新生赛">新生赛</a><time datetime="2023-11-26T06:21:51.000Z" title="Created 2023-11-26 14:21:51">2023-11-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/11/20/ArrayList/webSocketDemo/" title="WebSocket"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd13.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="WebSocket"/></a><div class="content"><a class="title" href="/2023/11/20/ArrayList/webSocketDemo/" title="WebSocket">WebSocket</a><time datetime="2023-11-20T07:21:51.000Z" title="Created 2023-11-20 15:21:51">2023-11-20</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>Categories</span>
+            
+            </div>
+            <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/java%E5%9F%BA%E7%A1%80/"><span class="card-category-list-name">java基础</span><span class="card-category-list-count">6</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/java%E6%A1%86%E6%9E%B6/"><span class="card-category-list-name">java框架</span><span class="card-category-list-count">7</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/mySQL/"><span class="card-category-list-name">mySQL</span><span class="card-category-list-count">11</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/"><span class="card-category-list-name">工具使用</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%9D%82%E4%B8%83%E6%9D%82%E5%85%AB/"><span class="card-category-list-name">杂七杂八</span><span class="card-category-list-count">11</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E7%AE%97%E6%B3%95/"><span class="card-category-list-name">算法</span><span class="card-category-list-count">5</span></a></li>
+            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>Tags</span></div><div class="card-tag-cloud"><a href="/tags/408/" style="font-size: 1.1em; color: #999">408</a> <a href="/tags/JAVA/" style="font-size: 1.27em; color: #99a0a9">JAVA</a> <a href="/tags/Spring/" style="font-size: 1.39em; color: #99a4b4">Spring</a> <a href="/tags/redis/" style="font-size: 1.16em; color: #999b9e">redis</a> <a href="/tags/%E6%8A%80%E6%9C%AF%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" style="font-size: 1.1em; color: #999">技术解决方案</a> <a href="/tags/%E6%95%99%E7%A8%8B/" style="font-size: 1.44em; color: #99a7ba">教程</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 1.5em; color: #99a9bf">数据库</a> <a href="/tags/%E6%B1%87%E7%BC%96/" style="font-size: 1.21em; color: #999ea4">汇编</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 1.33em; color: #99a2af">算法</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>Archives</span><a class="card-more-btn" href="/archives/" title="More">
+    <i class="fas fa-angle-right"></i></a></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/12/"><span class="card-archive-list-date">十二月 2023</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/11/"><span class="card-archive-list-date">十一月 2023</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/10/"><span class="card-archive-list-date">十月 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/08/"><span class="card-archive-list-date">八月 2023</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/07/"><span class="card-archive-list-date">七月 2023</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/06/"><span class="card-archive-list-date">六月 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/05/"><span class="card-archive-list-date">五月 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/03/"><span class="card-archive-list-date">三月 2023</span><span class="card-archive-list-count">1</span></a></li></ul></div></div></div></main><footer id="footer"><div id="footer_deal"><a class="deal_link" href="#" title="mail"><i class="iconfont icon-mail"></i></a><a class="deal_link" href="https://space.bilibili.com/322993153?spm_id_from=333.1007.0.0" title="bilibili" target="_blank"><i class="iconfont icon-bilibili"></i></a><a class="deal_link" href="https://weibo.com/u/6401692308" title="微博" target="_blank"><i class="iconfont icon-weibo1"></i></a><a class="deal_link" href="https://github.com/panther125" title="github" target="_blank"><i class="iconfont icon-github1"></i></a><img class="footer_mini_logo entered loading" style="border-radius:50%" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/stormtroopocat.png" onclick="btf.scrollToDest(0,500)" title="返回顶部"/><a class="deal_link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/huan-yan-20-44" title="知乎"><i class="iconfont icon-zhihu-circle-fill"></i></a><a class="deal_link" href="https://leetcode.cn/u/gin-qin-jiu/" title="Leetcode" target="_blank"><i class="iconfont icon-leetcode"></i></a><a class="deal_link" href="" title="Twitter" target="_blank"><i class="iconfont icon-twitter"></i></a><a class="deal_link" href="" title="Telegram" target="_blank"><i class="iconfont icon-telegram"></i></a></div><div id="footer-wrap"><div class="copyright">&copy;2021 - 2023 By panther</div><div class="wordcount"><span>Gin 琴酒居然写了 93.3k 字  </span><span>好像写完一本 林海音 的 《城南旧事》 了啊</span></div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><a class="icon-V hidden" onclick="switchNightMode()" title="Toggle Between Light And Dark Mode"><svg width="25" height="25" viewBox="0 0 1024 1024"><use id="modeicon" xlink:href="#icon-moon"></use></svg></a><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/vanilla-lazyload/17.3.1/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function subtitleType () {
+  if (true) { 
+    window.typed = new Typed("#subtitle", {
+      strings: ["等待消磨了热情，期待考验着耐心。","当你真心渴望追求某种事物的话，整个宇宙都会联合起来帮你完成。","你我山前没相见，山后别相逢。","满堂花醉三千客，一剑霜寒十四州。","一身转战三千里，一剑曾当百万军"],
+      startDelay: 300,
+      typeSpeed: 150,
+      loop: true,
+      backSpeed: 50
+    })
+  } else {
+    document.getElementById("subtitle").innerHTML = '等待消磨了热情，期待考验着耐心。'
+  }
+}
+
+if (true) {
+  if (typeof Typed === 'function') {
+    subtitleType()
+  } else {
+    getScript('https://cdn.jsdelivr.net/npm/typed.js/lib/typed.min.js').then(subtitleType)
+  }
+} else {
+  subtitleType()
+}</script></div><script data-pjax defer src="/js/custom/fixed_comment.js"></script><script async src="/js/diytitle.js"></script><script data-pjax src="/js/sun_moon.js" async></script><script async data-pjax src="/js/custom/nav.js"></script><script>WIDGET = {"CONFIG":{"modules":"012","background":"5","tmpColor":"FFFFFF","tmpSize":"16","cityColor":"FFFFFF","citySize":"16","aqiColor":"FFFFFF","aqiSize":"16","weatherIconSize":"24","alertIconSize":"18","padding":"10px 10px 10px 10px","shadow":"0","language":"auto","fixed":"false","vertical":"top","horizontal":"left","key":"49d571ee395448f89a68f7dace9dc11c"}}</script><script defer data-pjax src="https://widget.heweather.net/simple/static/js/he-simple.js?v=1.4.0"></script><script async data-pjax src="/js/custom/anzhiyu.js"></script><script async src="//at.alicdn.com/t/c/font_3423218_evl53i0ms0o.js"></script><link rel="stylesheet" href="https://blog.zhheo.com/plugin/aplayer/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://blog.zhheo.com/plugin/aplayer/APlayer.min.js"></script><script src="https://npm.elemecdn.com/hexo-anzhiyu-music@1.0.1/assets/js/Meting2.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><script data-pjax>
+    function butterfly_categories_card_injector_config(){
+      var parent_div_git = document.getElementById('recent-posts');
+      var item_html = '<style>li.categoryBar-list-item{width:32.3%;}.categoryBar-list{max-height: 380px;overflow:auto;}.categoryBar-list::-webkit-scrollbar{width:0!important}@media screen and (max-width: 650px){.categoryBar-list{max-height: 320px;}}</style><div class="recent-post-item" style="height:auto;width:100%;padding:0px;"><div id="categoryBar"><ul class="categoryBar-list"><li class="categoryBar-list-item" style="background:url(https://oss.gincode.icu/blog/gd05.jpg);"> <a class="categoryBar-list-link" href="categories/杂七杂八/">杂七杂八</a><span class="categoryBar-list-count">11</span><span class="categoryBar-list-descr">杂七杂八</span></li><li class="categoryBar-list-item" style="background:url(https://oss.gincode.icu/blog/gd06.jpg);"> <a class="categoryBar-list-link" href="categories/java基础/">java基础</a><span class="categoryBar-list-count">6</span><span class="categoryBar-list-descr">java学习笔记</span></li><li class="categoryBar-list-item" style="background:url(https://oss.gincode.icu/blog/gd07.jpg);"> <a class="categoryBar-list-link" href="categories/java框架/">java框架</a><span class="categoryBar-list-count">7</span><span class="categoryBar-list-descr">基于java的数据结构</span></li><li class="categoryBar-list-item" style="background:url(https://oss.gincode.icu/blog/gd09.jpg);"> <a class="categoryBar-list-link" href="categories/mySQL/">mySQL</a><span class="categoryBar-list-count">11</span><span class="categoryBar-list-descr">mysql</span></li><li class="categoryBar-list-item" style="background:url(https://oss.gincode.icu/blog/gd10.jpg);"> <a class="categoryBar-list-link" href="categories/算法/">算法</a><span class="categoryBar-list-count">5</span><span class="categoryBar-list-descr">算法基础</span></li><li class="categoryBar-list-item" style="background:url(https://oss.gincode.icu/blog/gd04.jpg);"> <a class="categoryBar-list-link" href="categories/工具使用/">工具使用</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr">工具使用</span></li></ul></div></div>';
+      console.log('已挂载butterfly_categories_card')
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+      }
+    if( document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    butterfly_categories_card_injector_config()
+    }
+  </script><!-- hexo injector body_end end --></body></html>

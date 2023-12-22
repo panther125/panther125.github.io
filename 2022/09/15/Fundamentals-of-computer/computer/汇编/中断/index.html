@@ -1,0 +1,242 @@
+<!DOCTYPE html><html lang="zh_CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>内中断 | Gin 琴酒</title><meta name="keywords" content="汇编"><meta name="author" content="panther"><meta name="copyright" content="panther"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="内中断的产生当CPU的内部有什么事情发生的时候，将产生需要马上处理的中断信息呢？对于8086CPU,当CPU内部有下面的情况发生的时候，将产生相应的中断信息。  除法错误，比如，执行div指令产生的除法溢出： 单步执行： 执行into指令： 执行int指令。中断处理程序CPU在收到中断信息后，应该转"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://oss.gincode.icu/2022/09/15/Fundamentals-of-computer/computer/%E6%B1%87%E7%BC%96/%E4%B8%AD%E6%96%AD/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":500,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '内中断',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-11-09 09:50:35'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="https://widget.heweather.net/simple/static/css/he-simple.css?v=1.4.0" media="defer" onload="this.media='all'"><svg aria-hidden="true" style="position:absolute; overflow:hidden; width:0; height:0"><symbol id="icon-sun" viewBox="0 0 1024 1024"><path d="M960 512l-128 128v192h-192l-128 128-128-128H192v-192l-128-128 128-128V192h192l128-128 128 128h192v192z" fill="#FFD878" p-id="8420"></path><path d="M736 512a224 224 0 1 0-448 0 224 224 0 1 0 448 0z" fill="#FFE4A9" p-id="8421"></path><path d="M512 109.248L626.752 224H800v173.248L914.752 512 800 626.752V800h-173.248L512 914.752 397.248 800H224v-173.248L109.248 512 224 397.248V224h173.248L512 109.248M512 64l-128 128H192v192l-128 128 128 128v192h192l128 128 128-128h192v-192l128-128-128-128V192h-192l-128-128z" fill="#4D5152" p-id="8422"></path><path d="M512 320c105.888 0 192 86.112 192 192s-86.112 192-192 192-192-86.112-192-192 86.112-192 192-192m0-32a224 224 0 1 0 0 448 224 224 0 0 0 0-448z" fill="#4D5152" p-id="8423"></path></symbol><symbol id="icon-moon" viewBox="0 0 1024 1024"><path d="M611.370667 167.082667a445.013333 445.013333 0 0 1-38.4 161.834666 477.824 477.824 0 0 1-244.736 244.394667 445.141333 445.141333 0 0 1-161.109334 38.058667 85.077333 85.077333 0 0 0-65.066666 135.722666A462.08 462.08 0 1 0 747.093333 102.058667a85.077333 85.077333 0 0 0-135.722666 65.024z" fill="#FFB531" p-id="11345"></path><path d="M329.728 274.133333l35.157333-35.157333a21.333333 21.333333 0 1 0-30.165333-30.165333l-35.157333 35.157333-35.114667-35.157333a21.333333 21.333333 0 0 0-30.165333 30.165333l35.114666 35.157333-35.114666 35.157334a21.333333 21.333333 0 1 0 30.165333 30.165333l35.114667-35.157333 35.157333 35.157333a21.333333 21.333333 0 1 0 30.165333-30.165333z" fill="#030835" p-id="11346"></path></symbol></svg><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@1.0.17/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@1.0.17/lib/assets/carousel-touch.js"></script><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-categories-card@1.0.0/lib/categorybar.css"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="scarecrow"><div class="scarecrow__hat"><div class="scarecrow__ribbon"></div></div><div class="scarecrow__head"><div class="scarecrow__eye"></div><div class="scarecrow__eye"></div><div class="scarecrow__mouth"></div><div class="scarecrow__pipe"></div></div><div class="scarecrow__body"><div class="scarecrow__glove scarecrow__glove--l"></div><div class="scarecrow__sleeve scarecrow__sleeve--l"></div><div class="scarecrow__bow"></div><div class="scarecrow__shirt"></div><div class="scarecrow__coat"></div><div class="scarecrow__waistcoat"></div><div class="scarecrow__sleeve scarecrow__sleeve--r"></div><div class="scarecrow__glove scarecrow__glove--r"></div><div class="scarecrow__coattails"></div><div class="scarecrow__pants"></div></div><div class="scarecrow__arms"></div><div class="scarecrow__leg">  </div></div></div><div id="web_bg"></div><div id="an_music_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://pic.imgdb.cn/item/64baa3da1ddac507ccec0e8f.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">42</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw icon-renzheng"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw icon-yuan_feidie"></i><span> 足迹</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fa-solid fa-box-archive"></i><span> 时间轴</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa-solid fa-list-check"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw icon-zhihangshu"></i><span> List</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/essay/"><i class="fa-fw icon-yuan_shouyinji"></i><span> 即刻短文</span></a></li><li><a class="site-page child" href="/video/"><i class="fa-fw icon-yuan_mianwan"></i><span> 视频</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw icon-yuan_shouyinji"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/world/"><i class="fa-fw icon-yuan_feidie"></i><span> 读世界</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw icon-yuan_xinfeng-17"></i><span> Link</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://api.qjqq.cn/api/Img?category=acg')"><div class="menu-container" id="menu-container"><div class="menu-item"><div class="menu-item-main"><a class="site-page faa-parent animated-hover" href="/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-renzheng"></use></svg><span> 主页</span></a></div><div class="menu-item-main has-child"><div class="menu-item-parent"><a class="site-page faa-parent animated-hover" href="javascript:void(0);"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-yuan_feidie"></use></svg><span> 足迹</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/archives/"><i class="fa-fw fa-solid fa-box-archive faa-tada"></i><span> 时间轴</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/tags/"><i class="fa-fw fa-solid fa-list-check faa-tada"></i><span> 标签</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open faa-tada"></i><span> 分类</span></a></div></div><div class="menu-item-main has-child"><div class="menu-item-parent"><a class="site-page faa-parent animated-hover" href="javascript:void(0);"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-zhihangshu"></use></svg><span> List</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/essay/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-yuan_shouyinji"></use></svg><span> 即刻短文</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/video/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-yuan_mianwan"></use></svg><span> 视频</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/music/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-yuan_shouyinji"></use></svg><span> 音乐</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/world/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-yuan_feidie"></use></svg><span> 读世界</span></a></div></div><div class="menu-item-main"><a class="site-page faa-parent animated-hover" href="/link/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-yuan_xinfeng-17"></use></svg><span> Link</span></a></div></div><div class="top-bar"><div class="message-container"><div class="message-item message-weather" onclick="btf.scrollToDest(0, 500)"><div class="message-weather-box" id="he-plugin-simple"></div></div><div class="message-item message-date" onclick="Navvisible()"><div class="message-date-box" id="message-date-box"></div><div class="message-title-box" id="message-title-box"><a id="site-name" title="欢迎光临，愿你有愉快的一天">分类</a></div></div><div class="message-item message-function"><div id="search-button"><a class="site-page social-icon search faa-parent animated-hover"><svg class="faa-tada icon" style="height:25px;width:25px" aria-hidden="true"><use xlink:href="#icon-yuan_kejian"></use></svg><span> Search</span></a></div><a class="icon-V hidden faa-parent animated-hover" onclick="switchNightMode()" title="Toggle Between Light And Dark Mode"><svg class="faa-tada" width="25" height="25" viewBox="0 0 1024 1024"><use id="modeicon" xlink:href="#icon-moon"></use></svg></a><div id="toggle-menu"><a class="site-page faa-parent animated-hover"><svg class="faa-tada icon" style="height:25px;width:25px" aria-hidden="true"><use xlink:href="#icon-multi-window-01"></use></svg></a></div></div></div></div><button class="active-button" onclick="Navvisible()"></button></div><div id="post-info"><h1 class="post-title">内中断</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-09-15T12:59:33.294Z" title="Created 2022-09-15 20:59:33">2022-09-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2022-11-09T01:50:35.158Z" title="Updated 2022-11-09 09:50:35">2022-11-09</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%9D%82%E4%B8%83%E6%9D%82%E5%85%AB/">杂七杂八</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">2.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>9min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="内中断"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><div class="poem-wrap"><div class="poem-border poem-left"></div><div class="poem-border poem-right"></div><h1>每日一句诗词</h1><p id="poem">loading...</p><p id="info">loading...</p></div><article class="post-content" id="article-container"><h1 id="内中断的产生"><a href="#内中断的产生" class="headerlink" title="内中断的产生"></a>内中断的产生</h1><p>当CPU的内部有什么事情发生的时候，将产生需要马上处理的中断信息呢？对于8086CPU,当CPU内部有下面的情况发生的时候，将产生相应的中断信息。</p>
+<ul>
+<li>除法错误，比如，执行div指令产生的除法溢出：</li>
+<li>单步执行：</li>
+<li>执行into指令：</li>
+<li>执行int指令。<h2 id="中断处理程序"><a href="#中断处理程序" class="headerlink" title="中断处理程序"></a>中断处理程序</h2>CPU在收到中断信息后，应该转去执行该中断信息的处理程序。我们知道，若要8086CPU执行某处的程序，就要将CS:IP指向它的入口（即程序第一条指令的地址）。可见首要的问题是，CPU在收到中断信息后，如何根据中断信息确定其处理程序的入口。CPU的设计者必须在中断信息和其处理程序的入口地址之间建立某种联系，使得CPU根据中断信息可以找到要执行的处理程序。<h2 id="中断向量表"><a href="#中断向量表" class="headerlink" title="中断向量表"></a>中断向量表</h2></li>
+</ul>
+<ul>
+<li>中断向量表，就是中断程序入口地址的列表</li>
+<li>中断向量表在内存中存放，其中包含256个中断程序所对应的入口<h2 id="中断过程"><a href="#中断过程" class="headerlink" title="中断过程"></a>中断过程</h2>CPU收到中断信息后，要对中断信息进行处理，首先将引发中断过程。硬件在完成中断过程后，CS:P将指向中断处理程序的入口，CPU开始执行中断处理程序。<div class="tip info"><p>有一个问题需要考虑，CPU在执行完中断处理程序后，应该返回原来的执行点继续执行下面的指令。所以在中断过程中，在设置CS:P之前，还要将原来的CS和P的值保存起来。在使用cl指令调用子程序时有同样的问题，子程序执行后还要返回到原来的执行点继续执行，所以，call指令先保存当前CS和IP的值，然后再设置CS和P。</p>
+</div></li>
+</ul>
+<ol>
+<li>取得中断类型码</li>
+<li>标志寄存器的值入栈(中断过程会改变标志，所以先保存原来的值)</li>
+<li>设置标志寄存器的第八位TF(陷阱标志)和第九位IF(中断标志)为零<div class="tip warning"><p>设置TF = 0很重要，否则不停产生单步中断不断循环，TF置为0不允许单步中断了</p>
+</div></li>
+<li>cs内容入栈，ip内容入栈</li>
+<li>从内存地址为中断类型码<em> 4和中断类型码</em> 4+2的两个字单元中读取中断处理程序的入口地址设置IP和CS。<h1 id="中断程序和iret指令"><a href="#中断程序和iret指令" class="headerlink" title="中断程序和iret指令"></a>中断程序和iret指令</h1>常规步骤：</li>
+</ol>
+<ul>
+<li>保存用到的寄存器</li>
+<li>处理中断</li>
+<li>恢复寄存器</li>
+<li>用iret返回<div class="tip error"><p>入栈顺序为：标志寄存器、CS、IP<br>出栈顺序为：IP、CS、标志寄存器</p>
+</div>
+<h2 id="除法错误中断"><a href="#除法错误中断" class="headerlink" title="除法错误中断"></a>除法错误中断</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mov ax,1000h</span><br><span class="line">mov bh,1</span><br><span class="line">div bh</span><br></pre></td></tr></table></figure></li>
+</ul>
+<ul>
+<li>显示提示信息“Divide overflow”，并返回操作系统<span class='p cyan'>编写中断处理</span></li>
+<li>设置es：di指向目的地址</li>
+<li>设置ds：si指向源地址</li>
+<li>设置cx的值</li>
+<li>设置传输方向（std为逆向，cld为正向）</li>
+<li>rep movsb<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mov ax,cs</span><br><span class="line">mov ds,ax</span><br><span class="line">mov si,offset do0      ;设置es：di指向目的地址</span><br><span class="line"></span><br><span class="line">mov ax,0</span><br><span class="line">mov es,ax</span><br><span class="line">mov di,200h            ;设置ds：si指向源地址</span><br><span class="line"></span><br><span class="line">mov cx,offset do0end-offset do0    ;设置cx的值为传输长度（-）减号</span><br><span class="line"></span><br><span class="line">cld                    ;设置传输方向（std为逆向，cld为正向）</span><br><span class="line"></span><br><span class="line">rep movsb</span><br></pre></td></tr></table></figure>
+<h1 id="int指令"><a href="#int指令" class="headerlink" title="int指令"></a>int指令</h1>int指令格式： int n，n为中断类型码，引发中断过程<br>cpu执行int指令的过程：</li>
+</ul>
+<ol>
+<li>取中断类型码n</li>
+<li>标志寄存器入栈，IF=0，TF=0</li>
+<li>CS，IP入栈</li>
+<li>IP=（N<em> 4），CS=（N</em> 4+2）<br><strong>例如</strong><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov ax,0b800h		;电脑显存的地址</span><br><span class="line">mov ex,ax</span><br><span class="line">mov byte ptr es:[12*160+40*2]  ;显示在中间位置</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h1 id="端口"><a href="#端口" class="headerlink" title="端口"></a>端口</h1>从CPU的角度，将这些寄存器都当作端口，对它们进行统一编址，从而建立了一个统一的端口地址空间。每一个端口在地址空间中都有一个地址。<br>CPU可以直接读写以下3个地方的数据。</li>
+<li>CPU内部的寄存器：</li>
+<li>内存单元：</li>
+<li>端口。<h2 id="端口的读写"><a href="#端口的读写" class="headerlink" title="端口的读写"></a>端口的读写</h2>在访问端口的时候，CPU通过端口地址来定位端口。因为端口所在的芯片和CPU通过总线相连，所以，端口地址和内存地址一样，通过地址总线来传送。在PC系统中，CPU最多可以定位64KB个不同的端口。则端口地址的范围为0~65535。<br>对端口的读写不能用<code>mov</code>、<code>push</code>、<code>pop</code>等内存读写指令。端口的读写指令只有两条：<code>in</code>和<code>out</code>,分别用于从端口读取数据和往端口写入数据。<br><strong>访问内存与端口比较</strong></li>
+</ol>
+<ul>
+<li>访问内存<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mov ax,ds:[8]</span><br></pre></td></tr></table></figure></li>
+</ul>
+<ol>
+<li>cpu通过地址线将地址信息8发出</li>
+<li>cpu通过控制线发出内存读命令，选择存储器芯片并通知他，将要从中读取数据</li>
+<li>储存器将8号单元中的数据通过数据线送入cpu</li>
+</ol>
+<ul>
+<li>访问端口<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">in al,60h</span><br></pre></td></tr></table></figure></li>
+</ul>
+<ol>
+<li>cpu通过地址线将地址信息60发出</li>
+<li>cpu通过控制线发出端口读命令，选择端口所在的芯片并通知他，将要从中读取数据</li>
+<li>端口所在的芯片将8号单元中的数据通过数据线送入cpu<br>:::warning<br>在<code>in</code>和<code>out</code>指令中，只能用ax或al来存放端口读入的数据或要发送到端口的数据<br>:::<h2 id="CMOS-RAM芯片"><a href="#CMOS-RAM芯片" class="headerlink" title="CMOS RAM芯片"></a>CMOS RAM芯片</h2></li>
+<li>包含一个实时钟和一个有128个存储单元的RAM存储器（早期的计算机为64个字节)。</li>
+<li>该芯片靠电池供电。所以，关机后其内部的实时钟仍可正常工作，RAM中的信息不丢失。</li>
+<li>128个字节的RAM中，内部实时钟占用0~ 0dh单元来保存时间信息，其余大部分单元用于保存系统配置信息，供系统启动时BIOS程序读取。BIOS也提供了相关的程序，使我们开机的时候配置CMOS的系统信息</li>
+<li>该芯片内部有两个端口，端口地址为70h和71h。CPU通过这两个端口来读写CMOS RAM.</li>
+<li>70h为地址端口，存放要访问的CMOS RAM单元的地址；71h为数据端口，存放从选定的CMOS RAM单元中读取的数据，或要写入到其中的数据。可见，CPU对CMOS RAM的读写分两步进行，<br>比如，读CMOS RAM的2号单元：<br>①将2送入端口70h;<br>②从端口71h读出2号单元的内容。<h2 id="shl和shr指令"><a href="#shl和shr指令" class="headerlink" title="shl和shr指令"></a>shl和shr指令</h2><strong><kbd>shl</kbd>(逻辑左移)</strong></li>
+<li>将一个寄存器或内存单元中的数据向左移位；</li>
+<li>将最后移出的一位写入CF中；</li>
+<li>最低位用0补充。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mov al,10000010B;</span><br><span class="line">shl al,1   ;将al的数据向左移一位</span><br><span class="line">(al)=00000010B,ZF=1    ;将移出的写入zf中低位用零补充</span><br></pre></td></tr></table></figure>
+<div class="tip warning"><p>如果执行的次数大于1，则次数要放入cl中</p>
+</div>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov al,10001000B</span><br><span class="line">mov cl,3</span><br><span class="line">shl al,cl</span><br><span class="line">执行后(al)=01000000B,ZF=0</span><br></pre></td></tr></table></figure>
+:::<br><strong><kbd>shr</kbd>(逻辑右移)</strong><br>它和shl所进行的操作刚好相反。</li>
+<li>将一个寄存器或内存单元中的数据向右移位：</li>
+<li>将最后移出的一位写入CF中；</li>
+<li>最高位用0补充。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mov al,10000010B;</span><br><span class="line">shr al,1   ;将al的数据向左移一位</span><br><span class="line">(al)=01000001B,ZF=0    ;将移出的写入zf中高位用零补充</span><br></pre></td></tr></table></figure>
+:::warning no-icon<br>如果执行的次数大于1，则次数要放入cl中<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov al,10001100B</span><br><span class="line">mov cl,3</span><br><span class="line">shr al,cl</span><br><span class="line">执行后(al)=00010001B,ZF=1</span><br></pre></td></tr></table></figure>
+:::<h2 id="CNOS-RAM存储时间"><a href="#CNOS-RAM存储时间" class="headerlink" title="CNOS RAM存储时间"></a>CNOS RAM存储时间</h2>在CMOS RAM中，存放着当前的时间：年、月、日、时、分、秒。这6个信息的长<br>度都为1个字节，存放单元为：<br>秒：0      分：2         时：4      日：7             月：8            年：9<br>这些数据以BCD码的方式存放。<br><strong>在屏幕中间显示月份</strong><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mov al,8</span><br><span class="line">out 70h,8   ;读取内存8号的数据</span><br><span class="line">in  al,71h  ;显示内存8号的数据</span><br></pre></td></tr></table></figure>
+<h1 id="外中断"><a href="#外中断" class="headerlink" title="外中断"></a>外中断</h1><strong>外中断源有两类</strong><br>:::info no-icno<br>可屏蔽中断<br>:::<br>可屏蔽中断是CPU可以不响应的外中断。CPU是否响应可屏蔽中断，要看标志寄存器的IF位的设置。当CPU检测到可屏蔽中断信息时，如果IF=1,则CPU在执行完当前指令后响应中断，引发中断过程；如果IF=0,则不响应可屏蔽中断。<br>我们回忆一下内中断所引发的中断过程：</li>
+<li>取中断类型码n;</li>
+<li>标志寄存器入栈，IF=0,TF=0：</li>
+<li>CS、IP入栈；</li>
+<li>(IP)=(n<em> 4),(CS)=(n</em> 4+2)<br>可屏蔽中断所引发的中断过程，除在第1步的实现上有所不同外，基本上和内中断的中断过程相同。因为可屏蔽中断信息来自于==CPU外部==，中断类型码是通过[数据总线送入CPU]{.yellow}的；<br>而内中断的中断类型码是在[CPU内部产生的]{.yellow}。<br>现在，我们可以解释中断过程中将IF置为0的原因了。将IF置0的原因就是，在进入中断处理程序后，禁止其他的可屏蔽中断。当然，如果在中断处理程序中需要处理可屏蔽中断，可以用指令将IF置1.8086CPU提供的设置F的指令如下：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sti  ,设置IF=1;</span><br><span class="line">cli  ,设置IF=0。</span><br></pre></td></tr></table></figure>
+:::info no-icno<br>不可屏蔽中断<br>:::<br>不可屏蔽中断是CPU==必须响应==的外中断。当CPU检测到不可屏蔽中断信息时，则在执行完当前指令后，立即响应，引发中断过程。对于8086CPU,不可屏蔽中断的中断类型码固定为<code>2</code>，所以中断过程中，不需要取中断类型码。则不可屏蔽中断的中断过程为：</li>
+<li>标志寄存器入栈，IF=0,T℉=0：</li>
+<li>CS、IP入栈；</li>
+<li>(P)=(8),(CS)=(0AHD。<br>几乎所有由外设引发的外中断，都是可屏蔽中断。当外设有需要处理的事件（比如说键盘输入)发生时，相关芯片向CPU发出可屏蔽中断信息。不可屏蔽中断是在系统中有必须处理的紧急情况发生时用来通知CPU的中断信息。<h2 id="接口芯片和端口"><a href="#接口芯片和端口" class="headerlink" title="接口芯片和端口"></a>接口芯片和端口</h2>外设的输入不直接送入内存和CPU,而是送入相关的接口芯片的端口中；CPU向外设的输出也不是直接送入外设，而是先送入端口中，再由相关的芯片送到外设。CPU还可以向外设输出控制命令，而这些控制命令也是先送到相关芯片的端口中，然后再由相关的芯片根据命令对外设实施控制。可见，[CPU通过端口和外部设备进行联系。]{.yellow}<h2 id="键盘的处理过程"><a href="#键盘的处理过程" class="headerlink" title="键盘的处理过程"></a>键盘的处理过程</h2>按下一个键时，开关接通，该芯片就产生一个[扫描码]{.blue}，扫描码说明了按下的键在键盘上的位置。扫描码被送入主板上的相关接口芯片的寄存器中，该寄存器的端口地址为60h。松开按下的键时，也产生一个扫描码，扫描码说明了松开的键在键盘上的位置。松开按键时产生的扫描码也被送入60h端口中。一般将<br>[按下一个键时产生的扫描码称为<code>通码</code>，松开一个键产生的扫描码称为<code>断码</code>]{.yellow}。<br>[断码=通码+80h]{.label .info}</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__title"><span class="post-copyright-info"><h>内中断</h></span></div><div class="post-copyright-m"><div class="post-copyright-m-info"><div class="post-copyright-a"><h>作者</h><div class="post-copyright-cc-info"><h>Gin 琴酒</h></div></div><div class="post-copyright-c"><h>发布于</h><div class="post-copyright-cc-info"><h>2022-09-15</h></div></div><div class="post-copyright-u"><h>更新于</h><div class="post-copyright-cc-info"><h>2022-11-09</h></div></div><div class="post-copyright-c"><h>许可协议</h><div class="post-copyright-cc-info"><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a rel="noopener" target="_blank" title="CC BY-NC-SA 4.0" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></div></div></div><div class="tag_share"><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/09/15/Fundamentals-of-computer/computer/%E6%B1%87%E7%BC%96/%E6%8C%87%E4%BB%A4%E8%AE%B2%E8%A7%A3/"><img class="prev-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://api.qjqq.cn/api/Img?category=acg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">指令讲解</div></div></a></div><div class="next-post pull-right"><a href="/2022/09/15/computer-science/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%95%B0%E6%8D%AE%E5%BA%93/%E8%BF%9B%E9%98%B6%E7%9F%A5%E8%AF%86/"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://api.qjqq.cn/api/Img?category=acg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">sql进阶知识</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2022/09/15/Fundamentals-of-computer/computer/%E6%B1%87%E7%BC%96/%E6%B1%87%E7%BC%96%E6%A6%82%E8%BF%B0/" title="汇编概述"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://api.qjqq.cn/api/Img?category=acg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-09-15</div><div class="title">汇编概述</div></div></a></div><div><a href="/2022/09/15/Fundamentals-of-computer/computer/%E6%B1%87%E7%BC%96/%E6%8C%87%E4%BB%A4%E8%AE%B2%E8%A7%A3/" title="指令讲解"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://api.qjqq.cn/api/Img?category=acg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-09-15</div><div class="title">指令讲解</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://pic.imgdb.cn/item/64baa3da1ddac507ccec0e8f.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">panther</div><div class="widget widget_block card shadow-sm bg-white border-0"><p><a href="https://gincode.icu/world" target="_self" rel="noopener">   <img class="za" decoding="async" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://pic.imgdb.cn/item/641295a0ebf10e5d5324e7a1.png" alt="60秒懂世界" title="60秒懂世界"/></a></p></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">42</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/panther125"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/panther125" target="_blank" title="Github"><i class="fa-fw fa-brands fa-github-alt"></i></a><a class="social-icon" href="/2392189963@qq.com" target="_blank" title="Email"><i class="fa-fw fa-solid fa-envelope"></i></a><a class="social-icon" href="https://space.bilibili.com/322993153" target="_blank" title="Bilibili"><i class="fa-fw fa-brands fa-bilibili"></i></a><a class="social-icon" href="https://weibo.com/u/6401692308" target="_blank" title="weibo"><i class="fa-fw fa-brands fa-weibo"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%85%E4%B8%AD%E6%96%AD%E7%9A%84%E4%BA%A7%E7%94%9F"><span class="toc-number">1.</span> <span class="toc-text">内中断的产生</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.1.</span> <span class="toc-text">中断处理程序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F%E8%A1%A8"><span class="toc-number">1.2.</span> <span class="toc-text">中断向量表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD%E8%BF%87%E7%A8%8B"><span class="toc-number">1.3.</span> <span class="toc-text">中断过程</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD%E7%A8%8B%E5%BA%8F%E5%92%8Ciret%E6%8C%87%E4%BB%A4"><span class="toc-number">2.</span> <span class="toc-text">中断程序和iret指令</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%99%A4%E6%B3%95%E9%94%99%E8%AF%AF%E4%B8%AD%E6%96%AD"><span class="toc-number">2.1.</span> <span class="toc-text">除法错误中断</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#int%E6%8C%87%E4%BB%A4"><span class="toc-number">3.</span> <span class="toc-text">int指令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AB%AF%E5%8F%A3"><span class="toc-number">4.</span> <span class="toc-text">端口</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AB%AF%E5%8F%A3%E7%9A%84%E8%AF%BB%E5%86%99"><span class="toc-number">4.1.</span> <span class="toc-text">端口的读写</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CMOS-RAM%E8%8A%AF%E7%89%87"><span class="toc-number">4.2.</span> <span class="toc-text">CMOS RAM芯片</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#shl%E5%92%8Cshr%E6%8C%87%E4%BB%A4"><span class="toc-number">4.3.</span> <span class="toc-text">shl和shr指令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CNOS-RAM%E5%AD%98%E5%82%A8%E6%97%B6%E9%97%B4"><span class="toc-number">4.4.</span> <span class="toc-text">CNOS RAM存储时间</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%96%E4%B8%AD%E6%96%AD"><span class="toc-number">5.</span> <span class="toc-text">外中断</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A5%E5%8F%A3%E8%8A%AF%E7%89%87%E5%92%8C%E7%AB%AF%E5%8F%A3"><span class="toc-number">5.1.</span> <span class="toc-text">接口芯片和端口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%94%AE%E7%9B%98%E7%9A%84%E5%A4%84%E7%90%86%E8%BF%87%E7%A8%8B"><span class="toc-number">5.2.</span> <span class="toc-text">键盘的处理过程</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/12/20/computer-science/java/UtilTools/redis/redisslave/" title="Redis 主从复制"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd11.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Redis 主从复制"/></a><div class="content"><a class="title" href="/2023/12/20/computer-science/java/UtilTools/redis/redisslave/" title="Redis 主从复制">Redis 主从复制</a><time datetime="2023-12-20T07:21:51.000Z" title="Created 2023-12-20 15:21:51">2023-12-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/12/11/ArrayList/JMH/" title="JMH - Java 代码性能测试"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd18.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="JMH - Java 代码性能测试"/></a><div class="content"><a class="title" href="/2023/12/11/ArrayList/JMH/" title="JMH - Java 代码性能测试">JMH - Java 代码性能测试</a><time datetime="2023-12-11T07:21:51.000Z" title="Created 2023-12-11 15:21:51">2023-12-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/12/07/ArrayList/VirtualThread/" title="虚拟线程"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd17.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="虚拟线程"/></a><div class="content"><a class="title" href="/2023/12/07/ArrayList/VirtualThread/" title="虚拟线程">虚拟线程</a><time datetime="2023-12-07T07:21:51.000Z" title="Created 2023-12-07 15:21:51">2023-12-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/11/26/computer-science/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/nowcode3/" title="新生赛"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd15.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="新生赛"/></a><div class="content"><a class="title" href="/2023/11/26/computer-science/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/nowcode3/" title="新生赛">新生赛</a><time datetime="2023-11-26T06:21:51.000Z" title="Created 2023-11-26 14:21:51">2023-11-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/11/20/ArrayList/webSocketDemo/" title="WebSocket"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd13.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="WebSocket"/></a><div class="content"><a class="title" href="/2023/11/20/ArrayList/webSocketDemo/" title="WebSocket">WebSocket</a><time datetime="2023-11-20T07:21:51.000Z" title="Created 2023-11-20 15:21:51">2023-11-20</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer_deal"><a class="deal_link" href="#" title="mail"><i class="iconfont icon-mail"></i></a><a class="deal_link" href="https://space.bilibili.com/322993153?spm_id_from=333.1007.0.0" title="bilibili" target="_blank"><i class="iconfont icon-bilibili"></i></a><a class="deal_link" href="https://weibo.com/u/6401692308" title="微博" target="_blank"><i class="iconfont icon-weibo1"></i></a><a class="deal_link" href="https://github.com/panther125" title="github" target="_blank"><i class="iconfont icon-github1"></i></a><img class="footer_mini_logo entered loading" style="border-radius:50%" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/stormtroopocat.png" onclick="btf.scrollToDest(0,500)" title="返回顶部"/><a class="deal_link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/huan-yan-20-44" title="知乎"><i class="iconfont icon-zhihu-circle-fill"></i></a><a class="deal_link" href="https://leetcode.cn/u/gin-qin-jiu/" title="Leetcode" target="_blank"><i class="iconfont icon-leetcode"></i></a><a class="deal_link" href="" title="Twitter" target="_blank"><i class="iconfont icon-twitter"></i></a><a class="deal_link" href="" title="Telegram" target="_blank"><i class="iconfont icon-telegram"></i></a></div><div id="footer-wrap"><div class="copyright">&copy;2021 - 2023 By panther</div><div class="wordcount"><span>Gin 琴酒居然写了 93.3k 字  </span><span>好像写完一本 林海音 的 《城南旧事》 了啊</span></div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><a class="icon-V hidden" onclick="switchNightMode()" title="Toggle Between Light And Dark Mode"><svg width="25" height="25" viewBox="0 0 1024 1024"><use id="modeicon" xlink:href="#icon-moon"></use></svg></a><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/vanilla-lazyload/17.3.1/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script data-pjax defer src="/js/custom/fixed_comment.js"></script><script async src="/js/diytitle.js"></script><script data-pjax src="/js/sun_moon.js" async></script><script async data-pjax src="/js/custom/nav.js"></script><script>WIDGET = {"CONFIG":{"modules":"012","background":"5","tmpColor":"FFFFFF","tmpSize":"16","cityColor":"FFFFFF","citySize":"16","aqiColor":"FFFFFF","aqiSize":"16","weatherIconSize":"24","alertIconSize":"18","padding":"10px 10px 10px 10px","shadow":"0","language":"auto","fixed":"false","vertical":"top","horizontal":"left","key":"49d571ee395448f89a68f7dace9dc11c"}}</script><script defer data-pjax src="https://widget.heweather.net/simple/static/js/he-simple.js?v=1.4.0"></script><script async data-pjax src="/js/custom/anzhiyu.js"></script><script async src="//at.alicdn.com/t/c/font_3423218_evl53i0ms0o.js"></script><link rel="stylesheet" href="https://blog.zhheo.com/plugin/aplayer/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://blog.zhheo.com/plugin/aplayer/APlayer.min.js"></script><script src="https://npm.elemecdn.com/hexo-anzhiyu-music@1.0.1/assets/js/Meting2.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><script data-pjax>
+    function butterfly_categories_card_injector_config(){
+      var parent_div_git = document.getElementById('recent-posts');
+      var item_html = '<style>li.categoryBar-list-item{width:32.3%;}.categoryBar-list{max-height: 380px;overflow:auto;}.categoryBar-list::-webkit-scrollbar{width:0!important}@media screen and (max-width: 650px){.categoryBar-list{max-height: 320px;}}</style><div class="recent-post-item" style="height:auto;width:100%;padding:0px;"><div id="categoryBar"><ul class="categoryBar-list"><li class="categoryBar-list-item" style="background:url(https://oss.gincode.icu/blog/gd05.jpg);"> <a class="categoryBar-list-link" href="categories/杂七杂八/">杂七杂八</a><span class="categoryBar-list-count">11</span><span class="categoryBar-list-descr">杂七杂八</span></li><li class="categoryBar-list-item" style="background:url(https://oss.gincode.icu/blog/gd06.jpg);"> <a class="categoryBar-list-link" href="categories/java基础/">java基础</a><span class="categoryBar-list-count">6</span><span class="categoryBar-list-descr">java学习笔记</span></li><li class="categoryBar-list-item" style="background:url(https://oss.gincode.icu/blog/gd07.jpg);"> <a class="categoryBar-list-link" href="categories/java框架/">java框架</a><span class="categoryBar-list-count">7</span><span class="categoryBar-list-descr">基于java的数据结构</span></li><li class="categoryBar-list-item" style="background:url(https://oss.gincode.icu/blog/gd09.jpg);"> <a class="categoryBar-list-link" href="categories/mySQL/">mySQL</a><span class="categoryBar-list-count">11</span><span class="categoryBar-list-descr">mysql</span></li><li class="categoryBar-list-item" style="background:url(https://oss.gincode.icu/blog/gd10.jpg);"> <a class="categoryBar-list-link" href="categories/算法/">算法</a><span class="categoryBar-list-count">5</span><span class="categoryBar-list-descr">算法基础</span></li><li class="categoryBar-list-item" style="background:url(https://oss.gincode.icu/blog/gd04.jpg);"> <a class="categoryBar-list-link" href="categories/工具使用/">工具使用</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr">工具使用</span></li></ul></div></div>';
+      console.log('已挂载butterfly_categories_card')
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+      }
+    if( document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    butterfly_categories_card_injector_config()
+    }
+  </script><!-- hexo injector body_end end --></body></html>
