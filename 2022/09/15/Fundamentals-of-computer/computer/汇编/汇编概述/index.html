@@ -1,0 +1,413 @@
+<!DOCTYPE html><html lang="zh_CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>汇编概述 | Gin 琴酒</title><meta name="keywords" content="汇编"><meta name="author" content="panther"><meta name="copyright" content="panther"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="汇编概述 8086cpu有14个寄存器：AX BX CX DX SI DI SP BP IP CS SS DS ES PSW 8086所有的寄存器都是16位的，可以存储2个字节 AX BX CX DX通常用来存放一般性数据，称为通用寄存器不同的寻址方式(1) [idata]用一个常量来表示地址，可用"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://example.com/2022/09/15/Fundamentals-of-computer/computer/%E6%B1%87%E7%BC%96/%E6%B1%87%E7%BC%96%E6%A6%82%E8%BF%B0/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":500,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '汇编概述',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-11-09 09:50:19'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="https://widget.heweather.net/simple/static/css/he-simple.css?v=1.4.0" media="defer" onload="this.media='all'"><svg aria-hidden="true" style="position:absolute; overflow:hidden; width:0; height:0"><symbol id="icon-sun" viewBox="0 0 1024 1024"><path d="M960 512l-128 128v192h-192l-128 128-128-128H192v-192l-128-128 128-128V192h192l128-128 128 128h192v192z" fill="#FFD878" p-id="8420"></path><path d="M736 512a224 224 0 1 0-448 0 224 224 0 1 0 448 0z" fill="#FFE4A9" p-id="8421"></path><path d="M512 109.248L626.752 224H800v173.248L914.752 512 800 626.752V800h-173.248L512 914.752 397.248 800H224v-173.248L109.248 512 224 397.248V224h173.248L512 109.248M512 64l-128 128H192v192l-128 128 128 128v192h192l128 128 128-128h192v-192l128-128-128-128V192h-192l-128-128z" fill="#4D5152" p-id="8422"></path><path d="M512 320c105.888 0 192 86.112 192 192s-86.112 192-192 192-192-86.112-192-192 86.112-192 192-192m0-32a224 224 0 1 0 0 448 224 224 0 0 0 0-448z" fill="#4D5152" p-id="8423"></path></symbol><symbol id="icon-moon" viewBox="0 0 1024 1024"><path d="M611.370667 167.082667a445.013333 445.013333 0 0 1-38.4 161.834666 477.824 477.824 0 0 1-244.736 244.394667 445.141333 445.141333 0 0 1-161.109334 38.058667 85.077333 85.077333 0 0 0-65.066666 135.722666A462.08 462.08 0 1 0 747.093333 102.058667a85.077333 85.077333 0 0 0-135.722666 65.024z" fill="#FFB531" p-id="11345"></path><path d="M329.728 274.133333l35.157333-35.157333a21.333333 21.333333 0 1 0-30.165333-30.165333l-35.157333 35.157333-35.114667-35.157333a21.333333 21.333333 0 0 0-30.165333 30.165333l35.114666 35.157333-35.114666 35.157334a21.333333 21.333333 0 1 0 30.165333 30.165333l35.114667-35.157333 35.157333 35.157333a21.333333 21.333333 0 1 0 30.165333-30.165333z" fill="#030835" p-id="11346"></path></symbol></svg><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-categories-card@1.0.0/lib/categorybar.css"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo- tterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@1.0.17/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@1.0.17/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="scarecrow"><div class="scarecrow__hat"><div class="scarecrow__ribbon"></div></div><div class="scarecrow__head"><div class="scarecrow__eye"></div><div class="scarecrow__eye"></div><div class="scarecrow__mouth"></div><div class="scarecrow__pipe"></div></div><div class="scarecrow__body"><div class="scarecrow__glove scarecrow__glove--l"></div><div class="scarecrow__sleeve scarecrow__sleeve--l"></div><div class="scarecrow__bow"></div><div class="scarecrow__shirt"></div><div class="scarecrow__coat"></div><div class="scarecrow__waistcoat"></div><div class="scarecrow__sleeve scarecrow__sleeve--r"></div><div class="scarecrow__glove scarecrow__glove--r"></div><div class="scarecrow__coattails"></div><div class="scarecrow__pants"></div></div><div class="scarecrow__arms"></div><div class="scarecrow__leg">  </div></div></div><div id="web_bg"></div><div id="an_music_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://pic.imgdb.cn/item/64baa3da1ddac507ccec0e8f.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">38</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw icon-renzheng"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw icon-yuan_feidie"></i><span> 足迹</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fa-solid fa-box-archive"></i><span> 时间轴</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa-solid fa-list-check"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw icon-zhihangshu"></i><span> List</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/essay/"><i class="fa-fw icon-yuan_shouyinji"></i><span> 即刻短文</span></a></li><li><a class="site-page child" href="/video/"><i class="fa-fw icon-yuan_mianwan"></i><span> 视频</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw icon-yuan_shouyinji"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/world/"><i class="fa-fw icon-yuan_feidie"></i><span> 读世界</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw icon-yuan_xinfeng-17"></i><span> Link</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://api.qjqq.cn/api/Img?category=acg')"><div class="menu-container" id="menu-container"><div class="menu-item"><div class="menu-item-main"><a class="site-page faa-parent animated-hover" href="/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-renzheng"></use></svg><span> 主页</span></a></div><div class="menu-item-main has-child"><div class="menu-item-parent"><a class="site-page faa-parent animated-hover" href="javascript:void(0);"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-yuan_feidie"></use></svg><span> 足迹</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/archives/"><i class="fa-fw fa-solid fa-box-archive faa-tada"></i><span> 时间轴</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/tags/"><i class="fa-fw fa-solid fa-list-check faa-tada"></i><span> 标签</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open faa-tada"></i><span> 分类</span></a></div></div><div class="menu-item-main has-child"><div class="menu-item-parent"><a class="site-page faa-parent animated-hover" href="javascript:void(0);"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-zhihangshu"></use></svg><span> List</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/essay/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-yuan_shouyinji"></use></svg><span> 即刻短文</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/video/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-yuan_mianwan"></use></svg><span> 视频</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/music/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-yuan_shouyinji"></use></svg><span> 音乐</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/world/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-yuan_feidie"></use></svg><span> 读世界</span></a></div></div><div class="menu-item-main"><a class="site-page faa-parent animated-hover" href="/link/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-yuan_xinfeng-17"></use></svg><span> Link</span></a></div></div><div class="top-bar"><div class="message-container"><div class="message-item message-weather" onclick="btf.scrollToDest(0, 500)"><div class="message-weather-box" id="he-plugin-simple"></div></div><div class="message-item message-date" onclick="Navvisible()"><div class="message-date-box" id="message-date-box"></div><div class="message-title-box" id="message-title-box"><a id="site-name" title="欢迎光临，愿你有愉快的一天">分类</a></div></div><div class="message-item message-function"><div id="search-button"><a class="site-page social-icon search faa-parent animated-hover"><svg class="faa-tada icon" style="height:25px;width:25px" aria-hidden="true"><use xlink:href="#icon-yuan_kejian"></use></svg><span> Search</span></a></div><a class="icon-V hidden faa-parent animated-hover" onclick="switchNightMode()" title="Toggle Between Light And Dark Mode"><svg class="faa-tada" width="25" height="25" viewBox="0 0 1024 1024"><use id="modeicon" xlink:href="#icon-moon"></use></svg></a><div id="toggle-menu"><a class="site-page faa-parent animated-hover"><svg class="faa-tada icon" style="height:25px;width:25px" aria-hidden="true"><use xlink:href="#icon-multi-window-01"></use></svg></a></div></div></div></div><button class="active-button" onclick="Navvisible()"></button></div><div id="post-info"><h1 class="post-title">汇编概述</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-09-15T12:59:33.300Z" title="Created 2022-09-15 20:59:33">2022-09-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2022-11-09T01:50:19.969Z" title="Updated 2022-11-09 09:50:19">2022-11-09</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%9D%82%E4%B8%83%E6%9D%82%E5%85%AB/">杂七杂八</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">2.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>10min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="汇编概述"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><div class="poem-wrap"><div class="poem-border poem-left"></div><div class="poem-border poem-right"></div><h1>每日一句诗词</h1><p id="poem">loading...</p><p id="info">loading...</p></div><article class="post-content" id="article-container"><h1 id="汇编概述"><a href="#汇编概述" class="headerlink" title="汇编概述"></a>汇编概述</h1><ul>
+<li>8086cpu有14个寄存器：<br><code>AX</code> <code>BX</code> <code>CX</code> <code>DX</code> <code>SI</code> <code>DI</code> <code>SP</code> <code>BP</code> <code>IP</code> <code>CS</code> <code>SS</code> <code>DS</code> <code>ES</code> <code>PSW</code></li>
+<li>8086所有的寄存器都是16位的，可以存储2个字节</li>
+<li><code>AX</code> <code>BX</code> <code>CX</code> <code>DX</code>通常用来存放一般性数据，称为通用寄存器<h2 id="不同的寻址方式"><a href="#不同的寻址方式" class="headerlink" title="不同的寻址方式"></a>不同的寻址方式</h2>(1) [idata]用一个常量来表示地址，可用于直接定位一个内存单元；<br>(2) [bx]用一个变量来表示内存地址，可用于间接定位一个内存单元；<br>(3) [bx+idata]用一个变量和常量表示地址，可在一个起始地址的基础上用变量间接定位一个内存单元；<br>(4) [bx+si]用两个变量表示地址；<br>(5) [bx+si+idata]用两个变量和一个常量表示地址。<br>可以看到，从[idata]一直到[bx+si+idata]，我们可以用更加灵活的方式来定位一个内存<br>单元的地址。这使我们可以从更加结构化的角度来看待所要处理的数据。下面我们通过<br>个问题的系列来体会CPU提供多种寻址方式的用意，并学习一些相关的编程技巧。<h2 id="通用寄存器"><a href="#通用寄存器" class="headerlink" title="通用寄存器"></a>通用寄存器</h2>| 名称 | 中英文含义 | 作用 |<br>|-|-|-|<br>| AX | 累加器 | 使用频率最高，用于算术、逻辑运算以及与外设传送信息等 |<br>| BX | 基址寄存器 | 用来存放存储器地址，以方便指向变量或数组的元素 |<br>| CX | 计数器 | 作为循环操作等指令的计数器 |<br>| DX | 数据寄存器 | 存放数据，在输入、输出指令中存放外设端口地址 |<br>| SI | 源变址寄存器 | 指向字符串或数组的源操作数 |<br>| DI | 目的变址寄存器 | 指向字符串或数组的目的操作数 |<br>| BP | 基址指针寄存器 | 指向程序堆栈区的数据，主用于子程序中访问通过堆栈传输的参数和局部变量 |<br>| SP | 堆栈指针寄存器 | 专用于指向程序堆栈区顶部的数据，在涉及堆栈操作的指令中会自动增加或减少，以使其总是指向顶部 |</li>
+<li>8086cpu有4个段寄存器：<code>CS</code> <code>DS</code> <code>SS</code> <code>ES</code><h2 id="段寄存器"><a href="#段寄存器" class="headerlink" title="段寄存器"></a>段寄存器</h2>| 名称 | 中文含义 | 描述 |<br>|-|-|-|<br>| CS | 代码段寄存器 | 存放程序指令序列 |<br>| DS | 数据段寄存器 | 存放当前运行程序所用的数据 |<br>| SS | 堆栈段寄存器 | 确定堆栈所在的主存区域 |<br>| ES | 附加段寄存器 | 附加的数据段 |<h2 id="段寄存器的使用规定"><a href="#段寄存器的使用规定" class="headerlink" title="段寄存器的使用规定"></a>段寄存器的使用规定</h2>| 访问存储器的方式 | 默认段寄存器 | 可超越的段寄存器 | 偏移地址 |<br>|-|-|-|-|<br>| 取指令 | CS | 无 | IP |<br>| 堆栈操作 | SS | 无 | SP |<br>| 一般数据访问 | DS | CS,ED,SS | EA |<br>| 串操作的源操作数 | DS | CS,ED,SS | SI |<br>| 串操作的目的操作数 | ES | 无 | DI |<br>| BP作为基址的寻址方式 | SS | CS,DS,ES | EA |</li>
+<li><strong>数据</strong> —&gt; <strong>通用寄存器</strong> —&gt; <strong>段寄存器</strong><h2 id="CS-IP"><a href="#CS-IP" class="headerlink" title="CS:IP"></a>CS:IP</h2>CS和IP是8086CPU中两个最关键的寄存器，它们指示了CPU当前要读取指令的地<br>址。<strong>CS为代码段寄存器</strong>，<strong>IP 为指令指针寄存器</strong>，从名称上我们可以看出它们和指令的关系。<br>在8086PC 机中，任意时刻，设 CS 中的内容为M，IP 中的内容为N，8086CPU将从<br>内存 Mx16+N 单元开始，读取一条指令并执行。<h1 id="基本汇编指令"><a href="#基本汇编指令" class="headerlink" title="基本汇编指令"></a>基本汇编指令</h1><strong>汇编指令举例</strong></li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>汇编指令</th>
+<th>控制cpu完成的操作</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mov ax,18</td>
+<td>将18送给入寄存器ax</td>
+<td>ax = 18</td>
+</tr>
+<tr>
+<td>mov ah,78</td>
+<td>将78送给入寄存器ah</td>
+<td>ah = 78</td>
+</tr>
+<tr>
+<td>add ax,8</td>
+<td>将寄存器ax数据加上8</td>
+<td>ax = ax+8</td>
+</tr>
+<tr>
+<td>mov ax,bx</td>
+<td>将寄存器bx的数据送入ax</td>
+<td>ax = bx</td>
+</tr>
+<tr>
+<td>add ax,bx</td>
+<td>将寄存器bx和ax的数据相加送入ax</td>
+<td>ax = ax+bx</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>练习</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>汇编指令</th>
+<th>ax数据</th>
+<th>bx数据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mov ax,001AH</td>
+<td>001AH</td>
+<td>0000H</td>
+</tr>
+<tr>
+<td>mov bx,0026H</td>
+<td>001AH</td>
+<td>0026H</td>
+</tr>
+<tr>
+<td>add al,bl</td>
+<td>0040H</td>
+<td>0026H</td>
+</tr>
+<tr>
+<td>add ah,bl</td>
+<td>2640H</td>
+<td>0026H</td>
+</tr>
+<tr>
+<td>add bh,al</td>
+<td>2640H</td>
+<td>4026H</td>
+</tr>
+<tr>
+<td>mov ah,0</td>
+<td>0040H</td>
+<td>4026H</td>
+</tr>
+<tr>
+<td>add al,85H</td>
+<td>00C5H</td>
+<td>4026H</td>
+</tr>
+<tr>
+<td>add al,93H</td>
+<td>0058H</td>
+<td>4026H</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="指令执行与寄存器的内容"><a href="#指令执行与寄存器的内容" class="headerlink" title="指令执行与寄存器的内容"></a>指令执行与寄存器的内容</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>寄存器的内容</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mov ax,1000H</td>
+<td>ax=1000H</td>
+<td>将1000H送入ax寄存器中</td>
+</tr>
+<tr>
+<td>mov ds,ax</td>
+<td>ds=ax</td>
+<td>将ds设位1000H</td>
+</tr>
+<tr>
+<td>mov ax,[0]</td>
+<td>ax=1123H</td>
+<td>1000:0处存放的字型数据送入ax 1000:1单元存放字型数据的高8位：11H, 1000:0单元存放字型数据的低8位：23H， 所以1000:0处存放的字型数据为1123H。 指令执行时，字型数据的高 8 位送入 ah，字型数据的低 8 位送入 al，则 ax中的数据为1123H</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="栈-SS-SP"><a href="#栈-SS-SP" class="headerlink" title="栈(SS:SP)"></a>栈(SS:SP)</h1><p>8086CPU提供入栈和出栈指令，最基本的两个是<strong>PUSH(入栈)</strong>和<strong>POP(出栈)</strong>。<br>比如，<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">push ax   表示将寄存器ax中的数据送入栈中，</span><br><span class="line">pop ax    表示从栈顶取出数据送入ax</span><br></pre></td></tr></table></figure><br>8086CPU的入栈和出栈操作都是以字为单位进行的。</p>
+<h2 id="入栈和出栈执行过程"><a href="#入栈和出栈执行过程" class="headerlink" title="入栈和出栈执行过程"></a>入栈和出栈执行过程</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mov ax,0123H</span><br><span class="line">push ax</span><br><span class="line">mov bx,2266H</span><br><span class="line">push bx</span><br><span class="line">mov cx,1122H</span><br><span class="line">push cx</span><br><span class="line">pop ax</span><br><span class="line">pop bx</span><br><span class="line">pop cx</span><br></pre></td></tr></table></figure>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://pic.imgdb.cn/item/626e6237239250f7c58a72ed.png" alt=""><br>这不禁让我们想起一个问题，就是，CPU 如何知道当前要执行的指令所在的位置？<br>我们现在知道答案，那就是 CS、IP 中存放着当前指令的段地址和偏移地址。<br>现在的问题是：CPU 如何知道栈顶的位置？显然，也应该有相应的寄存器来存放栈顶的地址，<br>8086CPU 中，有两个寄存器，<strong>段寄存器 SS 和寄存器 SP</strong>，栈顶的段地址存放<br>在 <code>SS</code> 中，偏移地址存放在 <code>SP</code> 中。任意时刻，SS:SP 指向栈顶元素。push 指令和 pop 指<br>令执行时，CPU从SS和SP中得到栈顶的地址。</p>
+<h1 id="BX、SI、DI、BP"><a href="#BX、SI、DI、BP" class="headerlink" title="BX、SI、DI、BP"></a>BX、SI、DI、BP</h1><ul>
+<li>在8086中，只有这4个寄存器可以在[…]中进行内存单元的寻址<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mov ax,[bx]</span><br><span class="line">mov ax,[si]</span><br><span class="line">mov ax,[bx+si]</span><br><span class="line">mov ax,[bx+di]</span><br><span class="line">mov ax,[bx]</span><br><span class="line">mov ax,[di]</span><br><span class="line">mov ax,[bx+si]</span><br><span class="line">mov ax,[bx+di]</span><br></pre></td></tr></table></figure>
+:::warning</li>
+<li>bx不能与bp在一起，他们都是指向基址</li>
+<li>si和di不能在一起，他们都是变址<br>:::</li>
+<li>只要使用寄存器bp，没有显性给出段地址，默认段地址在SS<h1 id="源程序"><a href="#源程序" class="headerlink" title="源程序"></a>源程序</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">assume cs:codesg</span><br><span class="line"></span><br><span class="line">codesg segment</span><br><span class="line"></span><br><span class="line">start:	mov ax,0123H</span><br><span class="line">		mov bx,0456H</span><br><span class="line">		add ax,bx</span><br><span class="line">		add ax,ax</span><br><span class="line">		mov ax,4c00H</span><br><span class="line">		int 21H</span><br><span class="line"></span><br><span class="line">codesg ends</span><br><span class="line"></span><br><span class="line">end start</span><br></pre></td></tr></table></figure></li>
+</ul>
+<ol>
+<li>伪指令<br>:::info no-icon<br>在汇编语言源程序中，包含两种指令，一种是汇编指令，一种是伪指令。<br>汇编指令是有对应的机器码的指令，可以被编译为机器指令，最终为<br>CPU 所执行。而伪指令没有对应的机器指令，最终不被 CPU 所执行。那么<br>谁来执行伪指令呢？伪指令是由编译器来执行的指令，编译器根据伪指令来<br>进行相关的编译工作。<br>segment和ends是一对成对使用的伪指令，这是在写可被编译器编译的汇编程序时，<br>必须要用到的一对伪指令。segment 和 ends 的功能是定义一个段，segment说明一个段开<br>始，ends说明一个段结束。一个段必须有一个名称来标识，<br>:::</li>
+<li>end<br>:::info no-icon<br>end 是一个汇编程序的结束标记，编译器在编译汇编程序的过程中，如果碰到了伪指<br>令 end，就结束对源程序的编译。所以，在我们写程序的时候，如果程序写完了，要在结<br>尾处加上伪指令 end。否则，编译器在编译程序时，无法知道程序在何处结束。<br>注意，不要搞混了 end 和 ends，ends是和segment成对使用的，标记一个段的结束，<br>ends的含义可理解为“end segment”。我们这里讲的 end 的作用是标记整个程序的结束。<br>:::</li>
+<li>assume<br>:::info no-icon<br>这条伪指令的含义为“假设”。它假设某一段寄存器和程序中的某一个用<br>segment…ends 定义的段相关联。通过 assume 说明这种关联，在需要的情况下，<br>编译程序可以将段寄存器和某一个具体的段相联系。<br>assume 并不是一条非要深入理解不可的伪指令，以后我们编程时，<br>记着用 assume 将有特定用途的段和相关的段寄存器关联起来即可。<br>:::</li>
+<li>标号<br>:::info no-icon<br>在汇编源程序中，除了汇编指令和伪指令外，还有一些标号，比如“codese”这个标号<br>标号指代了一个地址。比如 codesg 在 segment 的前面，作为一个段的名称，这个段的名称最<br>终将被编译、连接程序处理为一个段的段地址。<br>:::<h1 id="debug常用命令解释"><a href="#debug常用命令解释" class="headerlink" title="debug常用命令解释"></a>debug常用命令解释</h1></li>
+</ol>
+<ul>
+<li><code>R</code>: 命令可以查看/修改CPU中各个寄存器中的内容. -r 查看所有寄存器内容,-r ax 按回车 出现”:” 输入新内容 .</li>
+<li><code>D</code>: 命令查看内存中的内容,例如: -d 1000:0 就是查看内存1000:0处的内容.</li>
+<li><code>E</code>: 命令修改内存中的内容.</li>
+<li><code>U</code>: 命令将内存单元总的内容翻译为汇编指令显示.</li>
+<li><code>T</code>: 命令执行CS:IP指向的指令.</li>
+<li><code>A</code>: 以汇编指令形式向内存中写入指令.</li>
+<li><code>t</code>: 单步执行.</li>
+<li><code>g</code>: [0000] 直接跳转到指定的地址.</li>
+<li><code>p</code>: 自动重复执行循环中的指令.知道(cx)=0为止.<h2 id="debug使用提示"><a href="#debug使用提示" class="headerlink" title="debug使用提示"></a>debug使用提示</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mov ax,2000H</span><br><span class="line">mov ds,ax</span><br><span class="line">mov al,[0]</span><br></pre></td></tr></table></figure>
+<strong>这其实就是吧0送入ax的低位字节，如果要实现偏移的传输，要加上段地址</strong><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mov ax,2000H</span><br><span class="line">mov ds,ax</span><br><span class="line">mov al,ds:[0]</span><br></pre></td></tr></table></figure>
+:::warning<br>下列指令分辨<br>:::<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov al,[0]      //将0赋值给ax的地位字节</span><br><span class="line">mov al,ds:[0]   //将数据段偏移地址为0的数据赋给al</span><br><span class="line">mov al,[bx]     //将数据段偏移地址为bx的数据赋给al</span><br><span class="line">mov al,ds:[bx]     //将数据段偏移地址为bx的数据赋给al</span><br></pre></td></tr></table></figure>
+:::warning</li>
+<li>在进行指令操作时指明是字和字节很有必要</li>
+<li>push至进行字操作<br>例如：<br>2000：1000 FF FF FF FF FF FF FF 。。。。。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mov ax,2000H</span><br><span class="line">mov ds,ax</span><br><span class="line">mov byte ptr [1000H],1</span><br><span class="line">内存变化为 01 FF FF FF FF .......</span><br><span class="line">----------------------------------------</span><br><span class="line">mov ax,2000H</span><br><span class="line">mov ds,ax</span><br><span class="line">mov word ptr [1000H],1</span><br><span class="line">内存变化为 01 00 FF FF FF .......</span><br></pre></td></tr></table></figure>
+:::<h1 id="汇编语言中数据位置的表达"><a href="#汇编语言中数据位置的表达" class="headerlink" title="汇编语言中数据位置的表达"></a>汇编语言中数据位置的表达</h1></li>
+</ul>
+<ol>
+<li><strong>立即数</strong><br>对于直接包含在机器指令的数据(执行前在cpu的指令缓冲区中)：在汇编指令中直接给出<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">例如：</span><br><span class="line">		mov ax,1</span><br><span class="line">		add ax,4c00H</span><br><span class="line">		or ax,11000111B</span><br><span class="line">		mov ax,&#x27;a&#x27;</span><br></pre></td></tr></table></figure></li>
+<li><strong>寄存器</strong><br>指令要处理的数据在寄存器中，在汇编指令中给出相应的寄存器名<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">例如：</span><br><span class="line">		mov ax,bx</span><br><span class="line">		mov ds,ax</span><br><span class="line">		puush bx</span><br><span class="line">		mov ds:[0],bx</span><br><span class="line">		push ds</span><br></pre></td></tr></table></figure></li>
+<li><strong>段地址(SA)和偏移地址(EA)</strong><br>指令要处理的数据在内存中，汇编指令可以给出[X]的格式在某个段寄存器中<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mov ax,[0]</span><br><span class="line">mov ax,[bx+8]</span><br><span class="line">mov ax,[bx+si]</span><br><span class="line">mov ax,[bx+si+8]</span><br><span class="line">默认段寄存器为数据段寄存器(DS)</span><br><span class="line">mov ax,[bp+si]</span><br><span class="line">默认段寄存器为堆栈段寄存器(SS)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="寄存器寻址"><a href="#寄存器寻址" class="headerlink" title="寄存器寻址"></a>寄存器寻址</h2></li>
+</ol>
+<ul>
+<li>idata表示常数
+<table>
+	<tr>
+		<td>寻址方式</td>
+		<td>名称</td>
+		<td>含义</td>
+		<td>举例</td>
+	</tr>
+	<tr>
+		<td>[idata]</td>
+		<td>EA=idata、SA=(ds)</td>
+		<td >直接寻址</td>
+		<td>[idata]</td>
+	</tr>
+	<tr>
+		<td>[bx]</td>
+		<td>EA=bx、SA=(ds)</td>
+		<td rowspan = "4" style="text-align: center;">寄存器间接寻址</td>
+		<td>[bx]</td>
+	</tr>
+	<tr>
+		<td>[si]</td>
+		<td>EA=si、SA=(ds)</td>
+		<td>[si]</td>
+	</tr>
+	<tr>
+		<td>[di]</td>
+		<td>EA=di、SA=(ds)</td>
+		<td>[di]</td>
+	</tr>
+	<tr>
+		<td>[bp]</td>
+		<td>EA=idata、SA=(ss)</td>
+		<td>[bp]</td>
+	</tr>
+	<tr>
+		<td>[bx+idata]</td>
+		<td>EA=bx+idata、SA=(ds)</td>
+		<td rowspan = "4" style="text-align: center;">寄存器相对寻址</td>
+		<td rowspan = "4" style="text-align: center;">[bx][idata]</td>
+	</tr>
+	<tr>
+		<td>[si+idata]</td>
+		<td>EA=si+idata、SA=(ds)</td>
+	</tr>
+	<tr>
+		<td>[di+idata]</td>
+		<td>EA=di+idata、SA=(ds)</td>
+	</tr>
+	<tr>
+		<td>[bp+idata]</td>
+		<td>EA=bp+idata、SA=(ss)</td>
+	</tr>
+	<tr>
+		<td>[bx+si]</td>
+		<td>EA=bx+si、SA=(ds)</td>
+		<td rowspan = "4" style="text-align: center;">基址变址寻址</td>
+		<td rowspan = "4" style="text-align: center;">[bx][si]</td>
+	</tr>
+	<tr>
+		<td>[bx+di]</td>
+		<td>EA=bx+di、SA=(ds)</td>
+	</tr>
+	<tr>
+		<td>[bp+si]</td>
+		<td>EA=bp+si、SA=(ss)</td>
+	</tr>
+	<tr>
+		<td>[bp+di]</td>
+		<td>EA=bp+di、SA=(ss)</td>
+	</tr>
+	<tr>
+		<td>[bx+si+idata]</td>
+		<td>EA=bx+si+idata、SA=(ds)</td>
+		<td rowspan = "4" style="text-align: center;">相对基址变址寻址</td>
+		<td rowspan = "4" style="text-align: center;">idata[bx][si]</td>
+	</tr>
+	<tr>
+		<td>[bx+di]</td>
+		<td>EA=bx+di+idata、SA=(ds)</td>
+	</tr>
+	<tr>
+		<td>[bp+si]</td>
+		<td>EA=bp+si+idata、SA=(ss)</td>
+	</tr>
+	<tr>
+		<td>[bp+di]</td>
+		<td>EA=bp+di+idata、SA=(ss)</td>
+	</tr>
+</table>
+
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__title"><span class="post-copyright-info"><h>汇编概述</h></span></div><div class="post-copyright-m"><div class="post-copyright-m-info"><div class="post-copyright-a"><h>作者</h><div class="post-copyright-cc-info"><h>Gin 琴酒</h></div></div><div class="post-copyright-c"><h>发布于</h><div class="post-copyright-cc-info"><h>2022-09-15</h></div></div><div class="post-copyright-u"><h>更新于</h><div class="post-copyright-cc-info"><h>2022-11-09</h></div></div><div class="post-copyright-c"><h>许可协议</h><div class="post-copyright-cc-info"><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a rel="noopener" target="_blank" title="CC BY-NC-SA 4.0" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></div></div></div><div class="tag_share"><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/09/17/ArrayList/ButterAnyston/"><img class="prev-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd02.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">博客写法合集</div></div></a></div><div class="next-post pull-right"><a href="/2022/09/15/Fundamentals-of-computer/computer/%E6%B1%87%E7%BC%96/%E6%8C%87%E4%BB%A4%E8%AE%B2%E8%A7%A3/"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://api.qjqq.cn/api/Img?category=acg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">指令讲解</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2022/09/15/Fundamentals-of-computer/computer/%E6%B1%87%E7%BC%96/%E6%8C%87%E4%BB%A4%E8%AE%B2%E8%A7%A3/" title="指令讲解"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://api.qjqq.cn/api/Img?category=acg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-09-15</div><div class="title">指令讲解</div></div></a></div><div><a href="/2022/09/15/Fundamentals-of-computer/computer/%E6%B1%87%E7%BC%96/%E4%B8%AD%E6%96%AD/" title="内中断"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://api.qjqq.cn/api/Img?category=acg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-09-15</div><div class="title">内中断</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://pic.imgdb.cn/item/64baa3da1ddac507ccec0e8f.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">panther</div><div class="widget widget_block card shadow-sm bg-white border-0"><p><a href="https://blog.gincode.icu/world" target="_self" rel="noopener">   <img class="za" decoding="async" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://pic.imgdb.cn/item/641295a0ebf10e5d5324e7a1.png" alt="60秒懂世界" title="60秒懂世界"/></a></p></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">38</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/panther125"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/panther125" target="_blank" title="Github"><i class="fa-fw fa-brands fa-github-alt"></i></a><a class="social-icon" href="mailto:2392189963@qq.com" target="_blank" title="Email"><i class="fa-fw fa-solid fa-envelope"></i></a><a class="social-icon" href="https://space.bilibili.com/322993153" target="_blank" title="Bilibili"><i class="fa-fw fa-brands fa-bilibili"></i></a><a class="social-icon" href="https://weibo.com/u/6401692308" target="_blank" title="weibo"><i class="fa-fw fa-brands fa-weibo"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B1%87%E7%BC%96%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">汇编概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8D%E5%90%8C%E7%9A%84%E5%AF%BB%E5%9D%80%E6%96%B9%E5%BC%8F"><span class="toc-number">1.1.</span> <span class="toc-text">不同的寻址方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-number">1.2.</span> <span class="toc-text">通用寄存器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AE%B5%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-number">1.3.</span> <span class="toc-text">段寄存器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AE%B5%E5%AF%84%E5%AD%98%E5%99%A8%E7%9A%84%E4%BD%BF%E7%94%A8%E8%A7%84%E5%AE%9A"><span class="toc-number">1.4.</span> <span class="toc-text">段寄存器的使用规定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CS-IP"><span class="toc-number">1.5.</span> <span class="toc-text">CS:IP</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%B1%87%E7%BC%96%E6%8C%87%E4%BB%A4"><span class="toc-number">2.</span> <span class="toc-text">基本汇编指令</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E4%BB%A4%E6%89%A7%E8%A1%8C%E4%B8%8E%E5%AF%84%E5%AD%98%E5%99%A8%E7%9A%84%E5%86%85%E5%AE%B9"><span class="toc-number">2.1.</span> <span class="toc-text">指令执行与寄存器的内容</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A0%88-SS-SP"><span class="toc-number">3.</span> <span class="toc-text">栈(SS:SP)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%A5%E6%A0%88%E5%92%8C%E5%87%BA%E6%A0%88%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B"><span class="toc-number">3.1.</span> <span class="toc-text">入栈和出栈执行过程</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#BX%E3%80%81SI%E3%80%81DI%E3%80%81BP"><span class="toc-number">4.</span> <span class="toc-text">BX、SI、DI、BP</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%BA%90%E7%A8%8B%E5%BA%8F"><span class="toc-number">5.</span> <span class="toc-text">源程序</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#debug%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E8%A7%A3%E9%87%8A"><span class="toc-number">6.</span> <span class="toc-text">debug常用命令解释</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#debug%E4%BD%BF%E7%94%A8%E6%8F%90%E7%A4%BA"><span class="toc-number">6.1.</span> <span class="toc-text">debug使用提示</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E4%B8%AD%E6%95%B0%E6%8D%AE%E4%BD%8D%E7%BD%AE%E7%9A%84%E8%A1%A8%E8%BE%BE"><span class="toc-number">7.</span> <span class="toc-text">汇编语言中数据位置的表达</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%84%E5%AD%98%E5%99%A8%E5%AF%BB%E5%9D%80"><span class="toc-number">7.1.</span> <span class="toc-text">寄存器寻址</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/01/11/ArrayList/jit/" title="JIT"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd21.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="JIT"/></a><div class="content"><a class="title" href="/2024/01/11/ArrayList/jit/" title="JIT">JIT</a><time datetime="2024-01-11T07:21:51.000Z" title="Created 2024-01-11 15:21:51">2024-01-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/12/20/computer-science/java/UtilTools/redis/redisslave/" title="Redis 主从复制"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd11.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Redis 主从复制"/></a><div class="content"><a class="title" href="/2023/12/20/computer-science/java/UtilTools/redis/redisslave/" title="Redis 主从复制">Redis 主从复制</a><time datetime="2023-12-20T07:21:51.000Z" title="Created 2023-12-20 15:21:51">2023-12-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/12/11/ArrayList/JMH/" title="JMH - Java 代码性能测试"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd18.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="JMH - Java 代码性能测试"/></a><div class="content"><a class="title" href="/2023/12/11/ArrayList/JMH/" title="JMH - Java 代码性能测试">JMH - Java 代码性能测试</a><time datetime="2023-12-11T07:21:51.000Z" title="Created 2023-12-11 15:21:51">2023-12-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/12/07/ArrayList/VirtualThread/" title="虚拟线程"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd17.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="虚拟线程"/></a><div class="content"><a class="title" href="/2023/12/07/ArrayList/VirtualThread/" title="虚拟线程">虚拟线程</a><time datetime="2023-12-07T07:21:51.000Z" title="Created 2023-12-07 15:21:51">2023-12-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/11/26/computer-science/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/nowcode3/" title="新生赛"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd15.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="新生赛"/></a><div class="content"><a class="title" href="/2023/11/26/computer-science/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/nowcode3/" title="新生赛">新生赛</a><time datetime="2023-11-26T06:21:51.000Z" title="Created 2023-11-26 14:21:51">2023-11-26</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer_deal"><a class="deal_link" href="#" title="mail"><i class="iconfont icon-mail"></i></a><a class="deal_link" href="https://space.bilibili.com/322993153?spm_id_from=333.1007.0.0" title="bilibili" target="_blank"><i class="iconfont icon-bilibili"></i></a><a class="deal_link" href="https://weibo.com/u/6401692308" title="微博" target="_blank"><i class="iconfont icon-weibo1"></i></a><a class="deal_link" href="https://github.com/panther125" title="github" target="_blank"><i class="iconfont icon-github1"></i></a><img class="footer_mini_logo entered loading" style="border-radius:50%" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/stormtroopocat.png" onclick="btf.scrollToDest(0,500)" title="返回顶部"/><a class="deal_link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/huan-yan-20-44" title="知乎"><i class="iconfont icon-zhihu-circle-fill"></i></a><a class="deal_link" href="https://leetcode.cn/u/gin-qin-jiu/" title="Leetcode" target="_blank"><i class="iconfont icon-leetcode"></i></a><a class="deal_link" href="" title="Twitter" target="_blank"><i class="iconfont icon-twitter"></i></a><a class="deal_link" href="" title="Telegram" target="_blank"><i class="iconfont icon-telegram"></i></a></div><div id="footer-wrap"><div class="copyright">&copy;2021 - 2024 By panther</div><div class="wordcount"><span>Gin 琴酒居然写了 88.1k 字  </span><span>好像写完一本 鲁迅 的 《呐喊》 了啊</span></div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><a class="icon-V hidden" onclick="switchNightMode()" title="Toggle Between Light And Dark Mode"><svg width="25" height="25" viewBox="0 0 1024 1024"><use id="modeicon" xlink:href="#icon-moon"></use></svg></a><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/vanilla-lazyload/17.3.1/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script data-pjax defer src="/js/custom/fixed_comment.js"></script><script async src="/js/diytitle.js"></script><script data-pjax src="/js/sun_moon.js" async></script><script async data-pjax src="/js/custom/nav.js"></script><script>WIDGET = {"CONFIG":{"modules":"012","background":"5","tmpColor":"FFFFFF","tmpSize":"16","cityColor":"FFFFFF","citySize":"16","aqiColor":"FFFFFF","aqiSize":"16","weatherIconSize":"24","alertIconSize":"18","padding":"10px 10px 10px 10px","shadow":"0","language":"auto","fixed":"false","vertical":"top","horizontal":"left","key":"49d571ee395448f89a68f7dace9dc11c"}}</script><script defer data-pjax src="https://widget.heweather.net/simple/static/js/he-simple.js?v=1.4.0"></script><script async data-pjax src="/js/custom/anzhiyu.js"></script><script async src="//at.alicdn.com/t/c/font_3423218_evl53i0ms0o.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/naokuo-blog@1.2.2/css/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.cbd.int/naokuo-blog@1.2.2/js/APlayer.min.js"></script><script src="https://npm.elemecdn.com/hexo-anzhiyu-music@1.0.1/assets/js/Meting2.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+    function butterfly_categories_card_injector_config(){
+      var parent_div_git = document.getElementById('recent-posts');
+      var item_html = '<style>li.categoryBar-list-item{width:32.3%;}.categoryBar-list{max-height: 380px;overflow:auto;}.categoryBar-list::-webkit-scrollbar{width:0!important}@media screen and (max-width: 650px){.categoryBar-list{max-height: 320px;}}</style><div class="recent-post-item" style="height:auto;width:100%;padding:0px;"><div id="categoryBar"><ul class="categoryBar-list"><li class="categoryBar-list-item" style="background:url(https://oss.gincode.icu/blog/gd05.jpg);"> <a class="categoryBar-list-link" href="categories/杂七杂八/">杂七杂八</a><span class="categoryBar-list-count">11</span><span class="categoryBar-list-descr">杂七杂八</span></li><li class="categoryBar-list-item" style="background:url(https://oss.gincode.icu/blog/gd06.jpg);"> <a class="categoryBar-list-link" href="categories/Java基础/">Java基础</a><span class="categoryBar-list-count">7</span><span class="categoryBar-list-descr">Java学习笔记</span></li><li class="categoryBar-list-item" style="background:url(https://oss.gincode.icu/blog/gd07.jpg);"> <a class="categoryBar-list-link" href="categories/Java框架/">Java框架</a><span class="categoryBar-list-count">4</span><span class="categoryBar-list-descr">基于Java的数据结构</span></li><li class="categoryBar-list-item" style="background:url(https://oss.gincode.icu/blog/gd09.jpg);"> <a class="categoryBar-list-link" href="categories/算法/">算法</a><span class="categoryBar-list-count">5</span><span class="categoryBar-list-descr">算法基础</span></li><li class="categoryBar-list-item" style="background:url(https://oss.gincode.icu/blog/gd10.jpg);"> <a class="categoryBar-list-link" href="categories/mySQL/">mySQL</a><span class="categoryBar-list-count">10</span><span class="categoryBar-list-descr">MySQL</span></li><li class="categoryBar-list-item" style="background:url(https://oss.gincode.icu/blog/gd04.jpg);"> <a class="categoryBar-list-link" href="categories/工具使用/">工具使用</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">工具使用</span></li></ul></div></div>';
+      console.log('已挂载butterfly_categories_card')
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+      }
+    if( document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    butterfly_categories_card_injector_config()
+    }
+  </script><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --></body></html>
