@@ -18,7 +18,7 @@ document.addEventListener('visibilitychange', function () {
 });
 if (document.querySelector('#bber-talk')) {
       var swiper = new Swiper('.swiper-container', {
-        direction: 'vertical', // 垂直切换选项
+        direction: 'vertical', 
         loop: true,
         autoplay: {
         delay: 3000,
