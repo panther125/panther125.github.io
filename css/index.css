@@ -7699,19 +7699,12 @@ svg.icon {
 #page:has(#essay_page) .page-title {
   display: none;
 }
-#web_bg ~ .page:has(#essay_page) {
-  background: #18171d;
-}
 #bber .bber-container-img {
   display: flex;
   align-items: center;
   justify-content: space-around;
   width: 100%;
-  flex-wrap: wrap;
   margin-bottom: 0.3rem;
-}
-#bber .bber-container-img .bber-content-noimg {
-  width: calc(100% / 4 - 5px);
 }
 
 #bber .bber-content-img img {
@@ -7847,7 +7840,6 @@ svg.icon {
   color: rgb(245, 108, 108);
   padding: 0px 8px;
   border-radius: 20px;
-  font-size: 1rem;
 }
 #bber .bber-content-link i {
   margin-right: 3px;
