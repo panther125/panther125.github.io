@@ -7997,7 +7997,6 @@ svg.icon {
   margin-top: 0px;
   border-radius: 24px;
   position: relative;
-  padding: 1rem 2rem;
   overflow: hidden;
 }
 #page:has(#essay_page) .author-content-item .card-content  {
