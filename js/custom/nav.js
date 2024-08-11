@@ -18,12 +18,12 @@ function updateComment() {
         }
       })
       .catch(error => {
-
+        console.log("接口错误！")
         // const poemElement = document.getElementById('poem');
         // const infoElement = document.getElementById('info');
         // poemElement.innerHTML = "获取出错啦";
         // infoElement.innerHTML = "";
-        console.error('Fetch error:', error);
+        //console.error('Fetch error:', error);
       });
   }
 
