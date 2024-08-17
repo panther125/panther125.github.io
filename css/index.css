@@ -2566,7 +2566,13 @@ strong {
   }
 }
 #recent-posts > .recent-post-item >.recent-post-info > .article-title {
-  color: #f2cb69 !important;
+  background: -webkit-linear-gradient(355deg, #4891ff 10.22%, #94bfff 36.31%, #ffc69d 56.39%, #ff8a4f 73.45%, #c25eff 91.52%);
+  background: -moz-linear-gradient(355deg, #4891ff 10.22%, #94bfff 36.31%, #ffc69d 56.39%, #ff8a4f 73.45%, #c25eff 91.52%);
+  background: -o-linear-gradient(355deg, #4891ff 10.22%, #94bfff 36.31%, #ffc69d 56.39%, #ff8a4f 73.45%, #c25eff 91.52%);
+  background: -ms-linear-gradient(355deg, #4891ff 10.22%, #94bfff 36.31%, #ffc69d 56.39%, #ff8a4f 73.45%, #c25eff 91.52%);
+  background: linear-gradient(95deg, #4891ff 10.22%, #94bfff 36.31%, #ffc69d 56.39%, #ff8a4f 73.45%, #c25eff 91.52%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-size: 1.72em;
   line-height: 1.4;
   -webkit-transition: all 0.2s ease-in-out;
