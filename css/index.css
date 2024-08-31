@@ -7660,7 +7660,7 @@ svg.icon {
     position: relative;
     width: 730px;
     max-width: 80%;
-    border: 2px solid #5433ff;
+    /**border: 2px solid #5433ff;**/
     border-top: 0;
     text-align: center;
     margin: 80px auto;
@@ -7674,14 +7674,28 @@ svg.icon {
 .poem-left {
     left: 0;
 }
-.poem-border {
+.poem-left::after {
+    content: "꧁༺";
     position: absolute;
-    height: 2px;
-    width: 27%;
-    background-color: #24c6dc;
+    height: 118px;
+    font-size: -webkit-xxx-large;
+    right: 0;
+    background-image: linear-gradient(to right, rgb(175, 82, 222), rgb(0, 122, 255));
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
 }
 .poem-right {
     right: 0;
+}
+.poem-right::before {
+    content: "༻꧂";
+    position: absolute;
+    height: 118px;
+    left: 0;
+    font-size: -webkit-xxx-large;
+    background-image: linear-gradient(to right, rgb(175, 82, 222), rgb(0, 122, 255));
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
 }
 #post ul>li::before {
     content: "";
@@ -7807,19 +7821,20 @@ svg.icon {
     vertical-align: middle;
     margin: 0 5px 0 0;
 }
-/* }
-.recent-post-item:before {
-    background: -webkit-linear-gradient(65deg, #000 10%, #383838 70%, #000 100%);
-    content: "";
-    background-image: url("https://www.blatr.cn/images/vip/black-line.svg");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    border-radius: 8px;
-} */
+h3:before{
+    color: #a0a0a0;
+    content: '\f0c1';
+    margin-right: 7px;
+    font-size: .95em;
+    font-family: 'Font Awesome 6 Free';
+    opacity: .45;
+    -webkit-transition: all .3s;
+    -moz-transition: all .3s;
+    -o-transition: all .3s;
+    -ms-transition: all .3s;
+    transition: all .3s;
+}
+  
 #page:has(#essay_page) {
   border: 0;
   box-shadow: none !important;

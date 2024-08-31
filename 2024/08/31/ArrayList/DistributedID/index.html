@@ -1,0 +1,425 @@
+<!DOCTYPE html><html lang="zh_CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>分布式唯一ID | Gin 琴酒</title><meta name="keywords" content="java"><meta name="author" content="panther"><meta name="copyright" content="panther"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="常见的分布式唯一ID使用"><link rel="shortcut icon" href="/img/favicon.ico"><link rel="canonical" href="https://example.com/2024/08/31/ArrayList/DistributedID/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":500,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '分布式唯一ID',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-09-01 00:37:47'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/swiper/swiper.min.css"><svg aria-hidden="true" style="position:absolute; overflow:hidden; width:0; height:0"><symbol id="icon-sun" viewBox="0 0 1024 1024"><path d="M960 512l-128 128v192h-192l-128 128-128-128H192v-192l-128-128 128-128V192h192l128-128 128 128h192v192z" fill="#FFD878" p-id="8420"></path><path d="M736 512a224 224 0 1 0-448 0 224 224 0 1 0 448 0z" fill="#FFE4A9" p-id="8421"></path><path d="M512 109.248L626.752 224H800v173.248L914.752 512 800 626.752V800h-173.248L512 914.752 397.248 800H224v-173.248L109.248 512 224 397.248V224h173.248L512 109.248M512 64l-128 128H192v192l-128 128 128 128v192h192l128 128 128-128h192v-192l128-128-128-128V192h-192l-128-128z" fill="#4D5152" p-id="8422"></path><path d="M512 320c105.888 0 192 86.112 192 192s-86.112 192-192 192-192-86.112-192-192 86.112-192 192-192m0-32a224 224 0 1 0 0 448 224 224 0 0 0 0-448z" fill="#4D5152" p-id="8423"></path></symbol><symbol id="icon-moon" viewBox="0 0 1024 1024"><path d="M611.370667 167.082667a445.013333 445.013333 0 0 1-38.4 161.834666 477.824 477.824 0 0 1-244.736 244.394667 445.141333 445.141333 0 0 1-161.109334 38.058667 85.077333 85.077333 0 0 0-65.066666 135.722666A462.08 462.08 0 1 0 747.093333 102.058667a85.077333 85.077333 0 0 0-135.722666 65.024z" fill="#FFB531" p-id="11345"></path><path d="M329.728 274.133333l35.157333-35.157333a21.333333 21.333333 0 1 0-30.165333-30.165333l-35.157333 35.157333-35.114667-35.157333a21.333333 21.333333 0 0 0-30.165333 30.165333l35.114666 35.157333-35.114666 35.157334a21.333333 21.333333 0 1 0 30.165333 30.165333l35.114667-35.157333 35.157333 35.157333a21.333333 21.333333 0 1 0 30.165333-30.165333z" fill="#030835" p-id="11346"></path></symbol></svg><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-categories-card@1.0.0/lib/categorybar.css"><link rel="stylesheet" href="https://unpkg.zhimg.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@1.0.17/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@1.0.17/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="scarecrow"><div class="scarecrow__hat"><div class="scarecrow__ribbon"></div></div><div class="scarecrow__head"><div class="scarecrow__eye"></div><div class="scarecrow__eye"></div><div class="scarecrow__mouth"></div><div class="scarecrow__pipe"></div></div><div class="scarecrow__body"><div class="scarecrow__glove scarecrow__glove--l"></div><div class="scarecrow__sleeve scarecrow__sleeve--l"></div><div class="scarecrow__bow"></div><div class="scarecrow__shirt"></div><div class="scarecrow__coat"></div><div class="scarecrow__waistcoat"></div><div class="scarecrow__sleeve scarecrow__sleeve--r"></div><div class="scarecrow__glove scarecrow__glove--r"></div><div class="scarecrow__coattails"></div><div class="scarecrow__pants"></div></div><div class="scarecrow__arms"></div><div class="scarecrow__leg">  </div></div></div><div id="web_bg"></div><div id="an_music_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://pic.imgdb.cn/item/64baa3da1ddac507ccec0e8f.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">38</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw icon-renzheng"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw icon-yuan_feidie"></i><span> 足迹</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fa-solid fa-box-archive"></i><span> 时间轴</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa-solid fa-list-check"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw icon-zhihangshu"></i><span> List</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/essay/"><i class="fa-fw icon-yuan_shouyinji"></i><span> 即刻短文</span></a></li><li><a class="site-page child" href="/video/"><i class="fa-fw icon-yuan_mianwan"></i><span> 视频</span></a></li><li><a class="site-page child" href="/world/"><i class="fa-fw icon-yuan_feidie"></i><span> 读世界</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw icon-yuan_xinfeng-17"></i><span> Link</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://oss.gincode.icu/blog/gd01.jpg')"><div class="menu-container" id="menu-container"><div class="menu-item"><div class="menu-item-main"><a class="site-page faa-parent animated-hover" href="/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-renzheng"></use></svg><span> 主页</span></a></div><div class="menu-item-main has-child"><div class="menu-item-parent"><a class="site-page faa-parent animated-hover" href="javascript:void(0);"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-yuan_feidie"></use></svg><span> 足迹</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/archives/"><i class="fa-fw fa-solid fa-box-archive faa-tada"></i><span> 时间轴</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/tags/"><i class="fa-fw fa-solid fa-list-check faa-tada"></i><span> 标签</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open faa-tada"></i><span> 分类</span></a></div></div><div class="menu-item-main has-child"><div class="menu-item-parent"><a class="site-page faa-parent animated-hover" href="javascript:void(0);"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-zhihangshu"></use></svg><span> List</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/essay/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-yuan_shouyinji"></use></svg><span> 即刻短文</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/video/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-yuan_mianwan"></use></svg><span> 视频</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/world/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-yuan_feidie"></use></svg><span> 读世界</span></a></div></div><div class="menu-item-main"><a class="site-page faa-parent animated-hover" href="/link/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-yuan_xinfeng-17"></use></svg><span> Link</span></a></div></div><div class="top-bar"><div class="message-container"><div class="message-item message-weather" onclick="btf.scrollToDest(0, 500)"><div class="message-weather-box" id="he-plugin-simple"></div></div><div class="message-item message-date" onclick="Navvisible()"><div class="message-date-box" id="message-date-box"></div><div class="message-title-box" id="message-title-box"><a id="site-name" title="欢迎光临，愿你有愉快的一天">comments</a></div></div><div class="message-item message-function"><div id="search-button"><a class="site-page social-icon search faa-parent animated-hover"><svg class="faa-tada icon" style="height:25px;width:25px" aria-hidden="true"><use xlink:href="#icon-yuan_kejian"></use></svg><span> Search</span></a></div><a class="icon-V hidden faa-parent animated-hover" onclick="switchNightMode()" title="Toggle Between Light And Dark Mode"><svg class="faa-tada" width="25" height="25" viewBox="0 0 1024 1024"><use id="modeicon" xlink:href="#icon-moon"></use></svg></a><div id="toggle-menu"><a class="site-page faa-parent animated-hover"><svg class="faa-tada icon" style="height:25px;width:25px" aria-hidden="true"><use xlink:href="#icon-multi-window-01"></use></svg></a></div></div></div></div><button class="active-button" onclick="Navvisible()"></button></div><div id="post-info"><h1 class="post-title">分布式唯一ID</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-08-31T07:21:51.000Z" title="Created 2024-08-31 15:21:51">2024-08-31</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2024-08-31T16:37:47.947Z" title="Updated 2024-09-01 00:37:47">2024-09-01</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Java%E6%A1%86%E6%9E%B6/">Java框架</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">4.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>14min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="分布式唯一ID"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><div class="poem-wrap"><div class="poem-border poem-left"></div><div class="poem-border poem-right"></div><h1>每日一句诗词</h1><p id="poem">loading...</p><p id="info">loading...</p></div><article class="post-content" id="article-container"><h2 id="分布式唯一ID"><a href="#分布式唯一ID" class="headerlink" title="分布式唯一ID"></a>分布式唯一ID</h2><p>分布式系统全局唯一的 id 是所有系统都会遇到的场景，往往会被用在搜索，存储方面，用于作为唯一的标识或者排序，比如全局唯一的订单号，优惠券的券码等，如果出现两个相同的订单号，对于用户无疑将是一个巨大的bug。</p>
+<p>在单体的系统中，生成唯一的 id 没有什么挑战，因为只有一台机器一个应用，直接使用单例加上一个原子操作自增即可。而在分布式系统中，不同的应用，不同的机房，不同的机器，要想生成的 ID 都是唯一的，确实需要下点功夫。</p>
+<p>一句话总结：</p>
+<blockquote>
+<p><strong>分布式唯一ID是为了给数据进行唯一标识。</strong></p>
+</blockquote>
+<h3 id="分布式唯一ID的特征"><a href="#分布式唯一ID的特征" class="headerlink" title="分布式唯一ID的特征"></a><strong>分布式唯一ID的特征</strong></h3><p>分布式唯一ID的核心是唯一性，其他的都是附加属性，一般来说，一个优秀的全局唯一ID方案有以下的特点，仅供参考：</p>
+<ul>
+<li>全局唯一：不可以重复，核心特点！</li>
+<li>大致有序或者单调递增：自增的特性有利于搜索，排序，或者范围查询等</li>
+<li>高性能：生成ID响应要快，延迟低</li>
+<li>高可用：要是只能单机，挂了，全公司依赖全局唯一ID的服务，全部都不可用了，所以生成ID的服务必须高可用</li>
+<li>方便使用：对接入者友好，能封装到开箱即用最好</li>
+<li>信息安全：有些场景，如果连续，那么很容易被猜到，攻击也是有可能的，这得取舍。</li>
+</ul>
+<h2 id="雪花算法"><a href="#雪花算法" class="headerlink" title="雪花算法"></a>雪花算法</h2><p><code>snowflake</code> 是 Twitter 开源的分布式ID生成算法，结果是一个long型的ID。其核心思想是：</p>
+<blockquote>
+<p>使用<strong>41bit作为毫秒数</strong>，<strong>10bit作为机器的ID</strong>（5个bit是数据中心，5个bit的机器ID），<strong>12bit作为毫秒内的流水号</strong>（意味着每个节点在每毫秒可以产生 4096 个 ID），最后还有一个符号位，永远是0。</p>
+</blockquote>
+<p><strong>雪花算法是 64 位 的二进制，一共包含了四部分：</strong></p>
+<ul>
+<li><p>1位是符号位，也就是最高位，始终是0，没有任何意义，因为要是唯一计算机二进制补码中就是负数，0才是正数。</p>
+</li>
+<li><p>41位是时间戳，具体到毫秒，41位的二进制可以使用69年，因为时间理论上永恒递增，所以根据这个排序是可以的。</p>
+</li>
+<li><p>10位是机器标识，可以全部用作机器ID，也可以用来标识机房ID + 机器ID，10位最多可以表示1024台机器。</p>
+</li>
+<li><p>12位是计数序列号，同一台机器上同一时间，理论上还可以同时生成不同的ID，12位的序列号能够区分出4096个ID。</p>
+</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/pics/snowflake.png" alt="snowflake"></p>
+<div class="note info simple"><p>SnowFlake 算法的缺点或者限制：</p>
+</div>
+<p>1、在Snowflake算法中，每个节点的机器ID和数据中心ID都是硬编码在代码中的，而且这些ID是全局唯一的。当某个节点出现故障或者需要扩容时，就需要更改其对应的机器ID或数据中心ID，但是这个过程比较麻烦，需要重新编译代码，重新部署系统。还有就是，如果某个节点的机器ID或数据中心ID被设置成了已经被分配的ID，那么就会出现重复的ID，这样会导致系统的错误和异常。</p>
+<p>2、Snowflake算法中，需要使用zookeeper来协调各个节点的ID生成，但是ZK的部署其实是有挺大的成本的，并且zookeeper本身也可能成为系统的瓶颈。</p>
+<p>3、依赖于系统时间的一致性，如果系统时间被回拨，或者不一致，可能会造成 ID 重复。</p>
+<h3 id="时间回拨问题"><a href="#时间回拨问题" class="headerlink" title="时间回拨问题"></a><strong>时间回拨问题</strong></h3><p>在获取时间的时候，可能会出现<code>时间回拨</code>的问题，什么是时间回拨问题呢？就是服务器上的时间突然倒退到之前的时间。</p>
+<ol>
+<li>人为原因，把系统环境的时间改了。</li>
+<li>有时候不同的机器上需要同步时间，可能不同机器之间存在误差，那么可能会出现时间回拨问题。</li>
+</ol>
+<p><strong>解决方案</strong></p>
+<ol>
+<li>回拨时间小的时候，不生成 ID，循环等待到时间点到达。</li>
+<li>上面的方案只适合时钟回拨较小的，如果间隔过大，阻塞等待，肯定是不可取的，因此要么超过一定大小的回拨直接报错，拒绝服务，或者有一种方案是利用拓展位，回拨之后在拓展位上加1就可以了，这样ID依然可以保持唯一。但是这个要求我们提前预留出位数，要么从机器id中，要么从序列号中，腾出一定的位，在时间回拨的时候，这个位置 <code>+1</code>。</li>
+</ol>
+<h2 id="百度的UidGenerator"><a href="#百度的UidGenerator" class="headerlink" title="百度的UidGenerator"></a>百度的UidGenerator</h2><p><code>UidGenerator</code> 是Java实现的, 基于<code>Snowflake</code>算法的唯一ID生成器。<code>UidGenerator</code>以组件形式工作在应用项目中, 支持自定义workerId位数和初始化策略, 从而适用于docker等虚拟化环境下实例自动重启、漂移等场景。 </p>
+<blockquote>
+<p><code>UidGenerator</code> 通过借用<strong>未来时间</strong>来解决sequence天然存在的并发限制; 采用<strong>RingBuffer</strong>来缓存已生成的UID, 并行化UID的生产和消费, 同时对CacheLine补齐，避免了由RingBuffer带来的硬件级「伪共享」问题. 最终单机QPS可达600万。</p>
+</blockquote>
+<h3 id="DefaultUidGenerator"><a href="#DefaultUidGenerator" class="headerlink" title="DefaultUidGenerator"></a>DefaultUidGenerator</h3><h4 id="delta-seconds"><a href="#delta-seconds" class="headerlink" title="delta seconds"></a>delta seconds</h4><p>这个值是指当前时间与<code>epoch</code>时间的时间差，且单位为秒。<code>epoch</code>时间就是指集成 UidGenerator 生成分布式 ID 服务第一次上线的时间，可配置，也一定要根据你的上线时间进行配置，因为默认的<code>epoch</code>时间可是<code>2016-09-20</code>，不配置的话，会浪费好几年的可用时间。</p>
+<h4 id="worker-id"><a href="#worker-id" class="headerlink" title="worker id"></a>worker id</h4><p>接下来说一下 UidGenerator 是如何被<code>worker id</code>赋值的，搭建 UidGenerator 的话，需要创建一个表：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DROP</span> DATABASE IF <span class="keyword">EXISTS</span> `xxxx`;</span><br><span class="line"><span class="keyword">CREATE</span> DATABASE `xxxx` ;</span><br><span class="line">use `xxxx`;</span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> IF <span class="keyword">EXISTS</span> WORKER_NODE;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> WORKER_NODE</span><br><span class="line">(</span><br><span class="line">ID <span class="type">BIGINT</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT COMMENT <span class="string">&#x27;auto increment id&#x27;</span>,</span><br><span class="line">HOST_NAME <span class="type">VARCHAR</span>(<span class="number">64</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;host name&#x27;</span>,</span><br><span class="line">PORT <span class="type">VARCHAR</span>(<span class="number">64</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;port&#x27;</span>,</span><br><span class="line">TYPE <span class="type">INT</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;node type: ACTUAL or CONTAINER&#x27;</span>,</span><br><span class="line">LAUNCH_DATE <span class="type">DATE</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;launch date&#x27;</span>,</span><br><span class="line">MODIFIED <span class="type">TIMESTAMP</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;modified time&#x27;</span>,</span><br><span class="line">CREATED <span class="type">TIMESTAMP</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;created time&#x27;</span>,</span><br><span class="line"><span class="keyword">PRIMARY</span> KEY(ID)</span><br><span class="line">)</span><br><span class="line"> COMMENT<span class="operator">=</span><span class="string">&#x27;DB WorkerID Assigner for UID Generator&#x27;</span>,ENGINE <span class="operator">=</span> INNODB;</span><br></pre></td></tr></table></figure>
+<p>UidGenerator 会在集成用它生成分布式 ID 的实例启动的时候，往这个表中插入一行数据，得到的 ID 值就是准备赋给<code>workerId</code>的值。由于<code>workerId</code>默认 22 位，那么，集成 UidGenerator 生成分布式 ID 的所有实例重启次数是不允许超过 4194303 次（即<code>2^22-1</code>），否则会抛出异常。</p>
+<p>这段逻辑的核心代码来自 <code>DisposableWorkerIdAssigner.java</code>中，当然，你也可以实现<code>WorkerIdAssigner.java</code>接口，自定义生成<code>workerId</code>。</p>
+<h4 id="sequence"><a href="#sequence" class="headerlink" title="sequence"></a>sequence</h4><p>核心代码如下，几个实现的关键点：</p>
+<ul>
+<li><code>synchronized</code>保证线程安全</li>
+<li>如果时间有任何的回拨，那么直接抛出异常</li>
+<li>如果当前时间和上一次是同一秒时间，那么<code>sequence</code>自增。如果同一秒内自增值超过<code>2^13-1</code>，那么就会自旋等待下一秒（<code>getNextSecond</code>）</li>
+<li>如果是新的一秒，那么<code>sequence</code>重新从 0 开始</li>
+</ul>
+<h3 id="CachedUidGenerator"><a href="#CachedUidGenerator" class="headerlink" title="CachedUidGenerator"></a>CachedUidGenerator</h3><p><code>RingBuffer</code>环形数组，数组每个元素成为一个slot。<code>RingBuffer</code>容量，默认为Snowflake算法中<strong>sequence(最后12位序列值)</strong>最大值，且为2^N。可通过<code>boostPower</code>配置进行扩容，以提高<code>RingBuffer</code> 读写吞吐量。</p>
+<p>Tail指针、Cursor指针用于环形数组上读写slot：</p>
+<ul>
+<li>Tail指针<br>表示Producer生产的最大序号(此序号从0开始，持续递增)。Tail不能超过Cursor，即生产者不能覆盖未消费的slot。当Tail已赶上curosr，此时可通过<code>rejectedPutBufferHandler</code>指定PutRejectPolicy</li>
+<li>Cursor指针<br>表示Consumer消费到的最小序号(序号序列与Producer序列相同)。Cursor不能超过Tail，即不能消费未生产的slot。当Cursor已赶上tail，此时可通过<code>rejectedTakeBufferHandler</code>指定TakeRejectPolicy</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/pics/ringbuffer.png" alt="ringbuffer"></p>
+<p><strong>CachedUidGenerator采用了双RingBuffer，Uid-RingBuffer用于存储Uid、Flag-RingBuffer用于存储Uid状态(是否可填充、是否可消费)</strong></p>
+<p>由于数组元素在内存中是连续分配的，可最大程度利用CPU cache以提升性能。但同时会带来<span class="bubble-content">伪共享</span><span class="bubble-notation"><span class="bubble-item" style="background-color:#71a4e3;">**伪共享**（False Sharing）指的是当多个线程在处理不同数据时，这些数据恰好被存储在同一个CPU缓存行（通常是64字节）中，导致不必要的缓存一致性流量，进而降低性能。
+
+举个简单的例子，假设有两个线程分别处理两个不同的变量，这两个变量刚好存储在同一个缓存行里。虽然线程操作的是不同的变量，但由于它们共享同一个缓存行，任何一个线程对其中一个变量的修改都会导致另一个线程的缓存无效，迫使它重新从主内存读取数据。</span></span>FalseSharing问题，为此在Tail、Cursor指针、Flag-RingBuffer中采用了CacheLine 补齐方式。人为增加变量之间的距离，避免它们落在同一个缓存行中，从而减少伪共享的影响。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/pics/ringbuffer.png" alt="ringbuffer"></p>
+<h4 id="RingBuffer填充时机"><a href="#RingBuffer填充时机" class="headerlink" title="RingBuffer填充时机"></a>RingBuffer填充时机</h4><ul>
+<li>初始化预填充<br>RingBuffer初始化时，预先填充满整个RingBuffer.</li>
+<li>即时填充<br>Take消费时，即时检查剩余可用slot量(<code>tail</code> - <code>cursor</code>)，如小于设定阈值，则补全空闲slots。阈值可通过<code>paddingFactor</code>来进行配置</li>
+<li>周期填充<br>通过Schedule线程，定时补全空闲slots。可通过<code>scheduleInterval</code>配置，以应用定时填充功能，并指定Schedule时间间隔</li>
+</ul>
+<h2 id="Leaf——美团点评分布式ID生成系统"><a href="#Leaf——美团点评分布式ID生成系统" class="headerlink" title="Leaf——美团点评分布式ID生成系统"></a>Leaf——美团点评分布式ID生成系统</h2><p>Leaf这个名字是来自德国哲学家、数学家莱布尼茨的一句话： &gt;There are no two identical leaves in the world &gt; “世界上没有两片相同的树叶”</p>
+<h3 id="Leaf-segment数据库方案"><a href="#Leaf-segment数据库方案" class="headerlink" title="Leaf-segment数据库方案"></a>Leaf-segment数据库方案</h3><p>第一种Leaf-segment方案，在使用数据库的方案上，做了如下改变： </p>
+<ul>
+<li>原方案每次获取ID都得读写一次数据库，造成数据库压力大。改为利用proxy server批量获取，每次获取一个segment(step决定大小)号段的值。用完之后再去数据库获取新的号段，可以大大的减轻数据库的压力。 </li>
+<li>各个业务不同的发号需求用biz_tag字段来区分，每个biz-tag的ID获取相互隔离，互不影响。如果以后有性能需求需要对数据库扩容，不需要上述描述的复杂的扩容操作，只需要对biz_tag分库分表就行。</li>
+</ul>
+<p>数据库表设计如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">+-------------+--------------+------+-----+-------------------+-----------------------------+</span><br><span class="line">| Field       | Type         | Null | Key | Default           | Extra                       |</span><br><span class="line">+-------------+--------------+------+-----+-------------------+-----------------------------+</span><br><span class="line">| biz_tag     | varchar(128) | NO   | PRI |                   |                             |</span><br><span class="line">| max_id      | bigint(20)   | NO   |     | 1                 |                             |</span><br><span class="line">| step        | int(11)      | NO   |     | NULL              |                             |</span><br><span class="line">| desc        | varchar(256) | YES  |     | NULL              |                             |</span><br><span class="line">| update_time | timestamp    | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |</span><br><span class="line">+-------------+--------------+------+-----+-------------------+-----------------------------+</span><br></pre></td></tr></table></figure>
+<p>重要字段说明：<code>biz_tag</code>用来区分业务，<code>max_id</code>表示该biz_tag目前所被分配的ID号段的最大值，<code>step</code>表示每次分配的号段长度。原来获取ID每次都需要写数据库，现在只需要把step设置得足够大，比如1000。那么只有当1000个号被消耗完了之后才会去重新读写一次数据库。读写数据库的频率从1减小到了1/step，大致架构如下图所示：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/pics/5e4ff128.png" alt="img"></p>
+<p>test_tag在第一台Leaf机器上是1~1000的号段，当这个号段用完时，会去加载另一个长度为step=1000的号段，假设另外两台号段都没有更新，这个时候第一台机器新加载的号段就应该是3001~4000。同时数据库对应的biz_tag这条数据的max_id会从3000被更新成4000，更新号段的SQL语句如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Begin</span></span><br><span class="line"><span class="keyword">UPDATE</span> <span class="keyword">table</span> <span class="keyword">SET</span> max_id<span class="operator">=</span>max_id<span class="operator">+</span>step <span class="keyword">WHERE</span> biz_tag<span class="operator">=</span>xxx</span><br><span class="line"><span class="keyword">SELECT</span> tag, max_id, step <span class="keyword">FROM</span> <span class="keyword">table</span> <span class="keyword">WHERE</span> biz_tag<span class="operator">=</span>xxx</span><br><span class="line"><span class="keyword">Commit</span></span><br></pre></td></tr></table></figure>
+<p>这种模式有以下优缺点：</p>
+<p>优点：</p>
+<ul>
+<li>Leaf服务可以很方便的线性扩展，性能完全能够支撑大多数业务场景。</li>
+<li>ID号码是趋势递增的8byte的64位数字，满足上述数据库存储的主键要求。</li>
+<li>容灾性高：Leaf服务内部有号段缓存，即使DB宕机，短时间内Leaf仍能正常对外提供服务。</li>
+<li>可以自定义max_id的大小，非常方便业务从原有的ID方式上迁移过来。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>ID号码不够随机，能够泄露发号数量的信息，不太安全。</li>
+<li>TP999数据波动大，当号段使用完之后还是会hang在更新数据库的I/O上，tg999数据会出现偶尔的尖刺。</li>
+<li>DB宕机会造成整个系统不可用。</li>
+</ul>
+<div class="note info simple"><p>双buffer优化</p>
+</div>
+<p>对于第二个缺点，Leaf-segment做了一些优化，简单的说就是：</p>
+<p>Leaf 取号段的时机是在号段消耗完的时候进行的，也就意味着号段临界点的ID下发时间取决于下一次从DB取回号段的时间，并且在这期间进来的请求也会因为DB号段没有取回来，导致线程阻塞。如果请求DB的网络和DB的性能稳定，这种情况对系统的影响是不大的，但是假如取DB的时候网络发生抖动，或者DB发生慢查询就会导致整个系统的响应时间变慢。</p>
+<p>为此，我们希望DB取号段的过程能够做到无阻塞，不需要在DB取号段的时候阻塞请求线程，即当号段消费到某个点时就异步的把下一个号段加载到内存中。而不需要等到号段用尽的时候才去更新号段。这样做就可以很大程度上的降低系统的TP999指标。详细实现如下图所示：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/pics/f2625fac.png" alt="img"></p>
+<p>采用双buffer的方式，Leaf服务内部有两个号段缓存区segment。当前号段已下发10%时，如果下一个号段未更新，则另启一个更新线程去更新下一个号段。当前号段全部下发完后，如果下个号段准备好了则切换到下个号段为当前segment接着下发，循环往复。</p>
+<ul>
+<li>每个biz-tag都有消费速度监控，通常推荐segment长度设置为服务高峰期发号QPS的600倍（10分钟），这样即使DB宕机，Leaf仍能持续发号10-20分钟不受影响。</li>
+<li>每次请求来临时都会判断下个号段的状态，从而更新此号段，所以偶尔的网络抖动不会影响下个号段的更新。</li>
+</ul>
+<h3 id="Leaf-snowflake方案"><a href="#Leaf-snowflake方案" class="headerlink" title="Leaf-snowflake方案"></a>Leaf-snowflake方案</h3><p>Leaf-segment方案可以生成趋势递增的ID，同时ID号是可计算的，不适用于订单ID生成场景，比如竞对在两天中午12点分别下单，通过订单id号相减就能大致计算出公司一天的订单量，这个是不能忍受的。面对这一问题，我们提供了 Leaf-snowflake方案。</p>
+<p>Leaf-snowflake方案完全沿用snowflake方案的bit位设计，即是“1+41+10+12”的方式组装ID号。对于workerID的分配，当服务集群数量较小的情况下，完全可以手动配置。Leaf服务规模较大，动手配置成本太高。所以使用Zookeeper持久顺序节点的特性自动对snowflake节点配置wokerID。Leaf-snowflake是按照下面几个步骤启动的：</p>
+<ol>
+<li>启动Leaf-snowflake服务，连接Zookeeper，在leaf_forever父节点下检查自己是否已经注册过（是否有该顺序子节点）。</li>
+<li>如果有注册过直接取回自己的workerID（zk顺序节点生成的int类型ID号），启动服务。</li>
+<li>如果没有注册过，就在该父节点下面创建一个持久顺序节点，创建成功后取回顺序号当做自己的workerID号，启动服务。</li>
+</ol>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/pics/a3f985a8.png" alt="img"></p>
+<div class="note info simple"><p>解决时钟问题</p>
+</div>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2017/1453b4e9.png" alt="img"></p>
+<p>参见上图整个启动流程图，服务启动时首先检查自己是否写过ZooKeeper leaf_forever节点：</p>
+<ol>
+<li>若写过，则用自身系统时间与leaf_forever/${self}节点记录时间做比较，若小于leaf_forever/${self}时间则认为机器时间发生了大步长回拨，服务启动失败并报警。</li>
+<li>若未写过，证明是新服务节点，直接创建持久节点leaf_forever/${self}并写入自身系统时间，接下来综合对比其余Leaf节点的系统时间来判断自身系统时间是否准确，具体做法是取leaf_temporary下的所有临时节点(所有运行中的Leaf-snowflake节点)的服务IP：Port，然后通过RPC请求得到所有节点的系统时间，计算sum(time)/nodeSize。</li>
+<li>若abs( 系统时间-sum(time)/nodeSize ) &lt; 阈值，认为当前系统时间准确，正常启动服务，同时写临时节点leaf_temporary/${self} 维持租约。</li>
+<li>否则认为本机系统时间发生大步长偏移，启动失败并报警。</li>
+<li>每隔一段时间(3s)上报自身系统时间写入leaf_forever/${self}。</li>
+</ol>
+<p>由于强依赖时钟，对时间的要求比较敏感，在机器工作时NTP同步也会造成秒级别的回退，建议可以直接关闭NTP同步。要么在时钟回拨的时候直接不提供服务直接返回ERROR_CODE，等时钟追上即可。<strong>或者做一层重试，然后上报报警系统，更或者是发现有时钟回拨之后自动摘除本身节点并报警</strong>，如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//发生了回拨，此刻时间小于上次发号时间</span></span><br><span class="line"><span class="keyword">if</span> (timestamp &lt; lastTimestamp) &#123;</span><br><span class="line">           <span class="type">long</span> <span class="variable">offset</span> <span class="operator">=</span> lastTimestamp - timestamp;</span><br><span class="line">           <span class="keyword">if</span> (offset &lt;= <span class="number">5</span>) &#123;</span><br><span class="line">               <span class="keyword">try</span> &#123;</span><br><span class="line">               	<span class="comment">//时间偏差大小小于5ms，则等待两倍时间</span></span><br><span class="line">                   wait(offset &lt;&lt; <span class="number">1</span>);<span class="comment">//wait</span></span><br><span class="line">                   timestamp = timeGen();</span><br><span class="line">                   <span class="keyword">if</span> (timestamp &lt; lastTimestamp) &#123;</span><br><span class="line">                      <span class="comment">//还是小于，抛异常并上报</span></span><br><span class="line">                       throwClockBackwardsEx(timestamp);</span><br><span class="line">                     &#125;    </span><br><span class="line">               &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;  </span><br><span class="line">                  <span class="keyword">throw</span>  e;</span><br><span class="line">               &#125;</span><br><span class="line">           &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">               <span class="comment">//throw</span></span><br><span class="line">               throwClockBackwardsEx(timestamp);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line"><span class="comment">//分配ID      </span></span><br></pre></td></tr></table></figure>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><div class='anzhiyu-tag-link'><a class="tag-Link" target="_blank" href=" https://github.com/twitter/snowflake">
+    <div class="tag-link-tips">引用站外地址</div>
+    <div class="tag-link-bottom">
+        <div class="tag-link-left" style="background-image: url(https://api.iowen.cn/favicon/github.com.png);"></div>
+        <div class="tag-link-right">
+            <div class="tag-link-title">twitter开源的雪花算法</div>
+            <div class="tag-link-sitename"> https://github.com/twitter/snowflake</div>
+        </div>
+        <i class="fa-solid fa-angle-right"></i>
+    </div>
+    </a></div>
+<div class='anzhiyu-tag-link'><a class="tag-Link" target="_blank" href=" https://github.com/baidu/uid-generator/blob/master/README.zh_cn.md">
+    <div class="tag-link-tips">引用站外地址</div>
+    <div class="tag-link-bottom">
+        <div class="tag-link-left" style="background-image: url(https://api.iowen.cn/favicon/baidu.com.png);"></div>
+        <div class="tag-link-right">
+            <div class="tag-link-title">百度开源 UidGenerator</div>
+            <div class="tag-link-sitename"> https://github.com/baidu/uid-generator/blob/master/README.zh_cn.md</div>
+        </div>
+        <i class="fa-solid fa-angle-right"></i>
+    </div>
+    </a></div>
+<div class='anzhiyu-tag-link'><a class="tag-Link" target="_blank" href=" https://tech.meituan.com/2017/04/21/mt-leaf.html">
+    <div class="tag-link-tips">引用站外地址</div>
+    <div class="tag-link-bottom">
+        <div class="tag-link-left" style="background-image: url(https://api.iowen.cn/favicon/tech.meituan.com.png);"></div>
+        <div class="tag-link-right">
+            <div class="tag-link-title">Leaf—美团点评分布式ID生成系统</div>
+            <div class="tag-link-sitename"> https://tech.meituan.com/2017/04/21/mt-leaf.html</div>
+        </div>
+        <i class="fa-solid fa-angle-right"></i>
+    </div>
+    </a></div></article><div class="post-copyright"><div class="post-copyright__title"><span class="post-copyright-info"><h>分布式唯一ID</h></span></div><div class="post-copyright-m"><div class="post-copyright-m-info"><div class="post-copyright-a"><h>作者</h><div class="post-copyright-cc-info"><h>Gin 琴酒</h></div></div><div class="post-copyright-c"><h>发布于</h><div class="post-copyright-cc-info"><h>2024-08-31</h></div></div><div class="post-copyright-u"><h>更新于</h><div class="post-copyright-cc-info"><h>2024-09-01</h></div></div><div class="post-copyright-c"><h>许可协议</h><div class="post-copyright-cc-info"><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a rel="noopener" target="_blank" title="CC BY-NC-SA 4.0" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></div></div></div><div class="tag_share"><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2024/08/16/ArrayList/safeAndCron/"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd29.jpg" onerror="onerror=null;src='/img/404.png'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">网站推荐和动态定时任务</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2024/08/12/ArrayList/work/desync/" title="java线上分析"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd28.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-12</div><div class="title">java线上分析</div></div></a></div><div><a href="/2024/06/17/ArrayList/work/work01/" title="实现产出 1： 场景优化"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd27.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-17</div><div class="title">实现产出 1： 场景优化</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div></div><div class="comment-wrap"><div><div id="waline-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://pic.imgdb.cn/item/64baa3da1ddac507ccec0e8f.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">panther</div><div class="widget widget_block card shadow-sm bg-white border-0"><p><a href="https://blog.gincode.icu/world" target="_self" rel="noopener">   <img class="za" decoding="async" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://pic.imgdb.cn/item/641295a0ebf10e5d5324e7a1.png" alt="60秒懂世界" title="60秒懂世界"/></a></p></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">38</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/panther125"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/panther125" target="_blank" title="Github"><i class="fa-fw fa-brands fa-github-alt"></i></a><a class="social-icon" href="mailto:2392189963@qq.com" target="_blank" title="Email"><i class="fa-fw fa-solid fa-envelope"></i></a><a class="social-icon" href="https://space.bilibili.com/322993153" target="_blank" title="Bilibili"><i class="fa-fw fa-brands fa-bilibili"></i></a><a class="social-icon" href="https://weibo.com/u/6401692308" target="_blank" title="weibo"><i class="fa-fw fa-brands fa-weibo"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E5%94%AF%E4%B8%80ID"><span class="toc-number">1.</span> <span class="toc-text">分布式唯一ID</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E5%94%AF%E4%B8%80ID%E7%9A%84%E7%89%B9%E5%BE%81"><span class="toc-number">1.1.</span> <span class="toc-text">分布式唯一ID的特征</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text">雪花算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E5%9B%9E%E6%8B%A8%E9%97%AE%E9%A2%98"><span class="toc-number">2.1.</span> <span class="toc-text">时间回拨问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%99%BE%E5%BA%A6%E7%9A%84UidGenerator"><span class="toc-number">3.</span> <span class="toc-text">百度的UidGenerator</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DefaultUidGenerator"><span class="toc-number">3.1.</span> <span class="toc-text">DefaultUidGenerator</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#delta-seconds"><span class="toc-number">3.1.1.</span> <span class="toc-text">delta seconds</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#worker-id"><span class="toc-number">3.1.2.</span> <span class="toc-text">worker id</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sequence"><span class="toc-number">3.1.3.</span> <span class="toc-text">sequence</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CachedUidGenerator"><span class="toc-number">3.2.</span> <span class="toc-text">CachedUidGenerator</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#RingBuffer%E5%A1%AB%E5%85%85%E6%97%B6%E6%9C%BA"><span class="toc-number">3.2.1.</span> <span class="toc-text">RingBuffer填充时机</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Leaf%E2%80%94%E2%80%94%E7%BE%8E%E5%9B%A2%E7%82%B9%E8%AF%84%E5%88%86%E5%B8%83%E5%BC%8FID%E7%94%9F%E6%88%90%E7%B3%BB%E7%BB%9F"><span class="toc-number">4.</span> <span class="toc-text">Leaf——美团点评分布式ID生成系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Leaf-segment%E6%95%B0%E6%8D%AE%E5%BA%93%E6%96%B9%E6%A1%88"><span class="toc-number">4.1.</span> <span class="toc-text">Leaf-segment数据库方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Leaf-snowflake%E6%96%B9%E6%A1%88"><span class="toc-number">4.2.</span> <span class="toc-text">Leaf-snowflake方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">5.</span> <span class="toc-text">参考资料</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/08/31/ArrayList/DistributedID/" title="分布式唯一ID"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd01.jpg" onerror="this.onerror=null;this.src='/img/404.png'" alt="分布式唯一ID"/></a><div class="content"><a class="title" href="/2024/08/31/ArrayList/DistributedID/" title="分布式唯一ID">分布式唯一ID</a><time datetime="2024-08-31T07:21:51.000Z" title="Created 2024-08-31 15:21:51">2024-08-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/08/16/ArrayList/safeAndCron/" title="网站推荐和动态定时任务"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd29.jpg" onerror="this.onerror=null;this.src='/img/404.png'" alt="网站推荐和动态定时任务"/></a><div class="content"><a class="title" href="/2024/08/16/ArrayList/safeAndCron/" title="网站推荐和动态定时任务">网站推荐和动态定时任务</a><time datetime="2024-08-16T07:21:51.000Z" title="Created 2024-08-16 15:21:51">2024-08-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/08/12/ArrayList/work/desync/" title="java线上分析"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd28.jpg" onerror="this.onerror=null;this.src='/img/404.png'" alt="java线上分析"/></a><div class="content"><a class="title" href="/2024/08/12/ArrayList/work/desync/" title="java线上分析">java线上分析</a><time datetime="2024-08-12T07:21:51.000Z" title="Created 2024-08-12 15:21:51">2024-08-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/06/17/ArrayList/work/work01/" title="实现产出 1： 场景优化"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd27.jpg" onerror="this.onerror=null;this.src='/img/404.png'" alt="实现产出 1： 场景优化"/></a><div class="content"><a class="title" href="/2024/06/17/ArrayList/work/work01/" title="实现产出 1： 场景优化">实现产出 1： 场景优化</a><time datetime="2024-06-17T07:21:51.000Z" title="Created 2024-06-17 15:21:51">2024-06-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/04/17/ArrayList/openresty/" title="openResty"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd26.jpg" onerror="this.onerror=null;this.src='/img/404.png'" alt="openResty"/></a><div class="content"><a class="title" href="/2024/04/17/ArrayList/openresty/" title="openResty">openResty</a><time datetime="2024-04-17T07:21:51.000Z" title="Created 2024-04-17 15:21:51">2024-04-17</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer_deal"><a class="deal_link" href="#" title="mail"><i class="iconfont icon-mail"></i></a><a class="deal_link" href="https://space.bilibili.com/322993153?spm_id_from=333.1007.0.0" title="bilibili" target="_blank"><i class="iconfont icon-bilibili"></i></a><a class="deal_link" href="https://weibo.com/u/6401692308" title="微博" target="_blank"><i class="iconfont icon-weibo1"></i></a><a class="deal_link" href="https://github.com/panther125" title="github" target="_blank"><i class="iconfont icon-github1"></i></a><img class="footer_mini_logo entered loading" style="border-radius:50%" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/stormtroopocat.png" onclick="btf.scrollToDest(0,500)" title="返回顶部"/><a class="deal_link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/huan-yan-20-44" title="知乎"><i class="iconfont icon-zhihu-circle-fill"></i></a><a class="deal_link" href="https://leetcode.cn/u/gin-qin-jiu/" title="Leetcode" target="_blank"><i class="iconfont icon-leetcode"></i></a><a class="deal_link" href="" title="Twitter" target="_blank"><i class="iconfont icon-twitter"></i></a><a class="deal_link" href="" title="Telegram" target="_blank"><i class="iconfont icon-telegram"></i></a></div><div id="footer-wrap"><div class="copyright">&copy;2021 - 2024 By panther</div><div class="wordcount"><span>Gin 琴酒居然写了 91.1k 字  </span><span>好像写完一本 林海音 的 《城南旧事》 了啊</span></div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><a class="icon-V hidden" onclick="switchNightMode()" title="Toggle Between Light And Dark Mode"><svg width="25" height="25" viewBox="0 0 1024 1024"><use id="modeicon" xlink:href="#icon-moon"></use></svg></a><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="to_comment" type="button" title="Scroll To Comments" onclick="FixedCommentBtn();"><i class="fas fa-comments"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/vanilla-lazyload/17.3.1/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function loadWaline () {
+  function insertCSS () {
+    const link = document.createElement("link")
+    link.rel = "stylesheet"
+    link.href = "https://cdn.jsdelivr.net/npm/@waline/client/dist/waline.min.css"
+    document.head.appendChild(link)
+  }
+
+  function initWaline () {
+    const waline = Waline.init(Object.assign({
+      el: '#waline-wrap',
+      serverURL: 'www.gincode.eu.org',
+      pageview: false,
+      dark: 'html[data-theme="dark"]',
+      path: window.location.pathname,
+      comment: false,
+    }, null))
+  }
+
+  if (typeof Waline === 'function') initWaline()
+  else {
+    insertCSS()
+    getScript('https://cdn.jsdelivr.net/npm/@waline/client/dist/waline.min.js').then(initWaline)
+  }
+}
+
+if ('Waline' === 'Waline' || !true) {
+  if (true) btf.loadComment(document.getElementById('waline-wrap'),loadWaline)
+  else setTimeout(loadWaline, 0)
+} else {
+  function loadOtherComment () {
+    loadWaline()
+  }
+}</script></div><script data-pjax defer src="/js/custom/fixed_comment.js"></script><script async src="/js/diytitle.js"></script><script data-pjax src="/js/sun_moon.js" async></script><script async data-pjax src="/js/custom/nav.js"></script><script>WIDGET = {"CONFIG":{"modules":"012","background":"5","tmpColor":"FFFFFF","tmpSize":"16","cityColor":"FFFFFF","citySize":"16","aqiColor":"FFFFFF","aqiSize":"16","weatherIconSize":"24","alertIconSize":"18","padding":"10px 10px 10px 10px","shadow":"0","language":"auto","fixed":"false","vertical":"top","horizontal":"left","key":"49d571ee395448f89a68f7dace9dc11c"}}</script><script async data-pjax src="/js/custom/anzhiyu.js"></script><script async src="//at.alicdn.com/t/c/font_3423218_evl53i0ms0o.js"></script><script data-pjax src="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/js/swiper.min.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/naokuo-blog@1.2.2/css/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://oss.gincode.icu/APlayer.min.js"></script><script src="https://npm.elemecdn.com/hexo-anzhiyu-music@1.0.1/assets/js/Meting2.min.js"></script><script src="https://lib.baomitu.com/pjax/0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+    function butterfly_categories_card_injector_config(){
+      var parent_div_git = document.getElementById('recent-posts');
+      var item_html = '<style>li.categoryBar-list-item{width:32.3%;}.categoryBar-list{max-height: 380px;overflow:auto;}.categoryBar-list::-webkit-scrollbar{width:0!important}@media screen and (max-width: 650px){.categoryBar-list{max-height: 320px;}}</style><div class="recent-post-item" style="height:auto;width:100%;padding:0px;"><div id="categoryBar"><ul class="categoryBar-list"><li class="categoryBar-list-item" style="background:url(https://oss.gincode.icu/blog/gd05.jpg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/杂七杂八/&quot;);" href="javascript:void(0);">杂七杂八</a><span class="categoryBar-list-count">14</span><span class="categoryBar-list-descr">杂七杂八</span></li><li class="categoryBar-list-item" style="background:url(https://oss.gincode.icu/blog/gd06.jpg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/Java基础/&quot;);" href="javascript:void(0);">Java基础</a><span class="categoryBar-list-count">6</span><span class="categoryBar-list-descr">Java学习笔记</span></li><li class="categoryBar-list-item" style="background:url(https://oss.gincode.icu/blog/gd07.jpg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/Java框架/&quot;);" href="javascript:void(0);">Java框架</a><span class="categoryBar-list-count">4</span><span class="categoryBar-list-descr">基于Java的数据结构</span></li><li class="categoryBar-list-item" style="background:url(https://oss.gincode.icu/blog/gd09.jpg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/工具使用/&quot;);" href="javascript:void(0);">工具使用</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr">算法基础</span></li><li class="categoryBar-list-item" style="background:url(https://oss.gincode.icu/blog/gd10.jpg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/mySQL/&quot;);" href="javascript:void(0);">mySQL</a><span class="categoryBar-list-count">6</span><span class="categoryBar-list-descr">MySQL</span></li><li class="categoryBar-list-item" style="background:url(https://oss.gincode.icu/blog/gd04.jpg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/算法/&quot;);" href="javascript:void(0);">算法</a><span class="categoryBar-list-count">5</span><span class="categoryBar-list-descr">工具使用</span></li></ul></div></div>';
+      console.log('已挂载butterfly_categories_card')
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+      }
+    if( document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    butterfly_categories_card_injector_config()
+    }
+  </script><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --></body></html>
