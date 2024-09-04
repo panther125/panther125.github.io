@@ -1,0 +1,313 @@
+<!DOCTYPE html><html lang="zh_CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>GZIP 的压缩原理与日常应用 | Gin 琴酒</title><meta name="keywords" content="java"><meta name="author" content="panther"><meta name="copyright" content="panther"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="常见的分布式唯一ID使用"><link rel="shortcut icon" href="/img/favicon.ico"><link rel="canonical" href="https://example.com/2024/09/01/ArrayList/GzipRaw/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":500,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'GZIP 的压缩原理与日常应用',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-09-05 01:17:38'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/swiper/swiper.min.css"><svg aria-hidden="true" style="position:absolute; overflow:hidden; width:0; height:0"><symbol id="icon-sun" viewBox="0 0 1024 1024"><path d="M960 512l-128 128v192h-192l-128 128-128-128H192v-192l-128-128 128-128V192h192l128-128 128 128h192v192z" fill="#FFD878" p-id="8420"></path><path d="M736 512a224 224 0 1 0-448 0 224 224 0 1 0 448 0z" fill="#FFE4A9" p-id="8421"></path><path d="M512 109.248L626.752 224H800v173.248L914.752 512 800 626.752V800h-173.248L512 914.752 397.248 800H224v-173.248L109.248 512 224 397.248V224h173.248L512 109.248M512 64l-128 128H192v192l-128 128 128 128v192h192l128 128 128-128h192v-192l128-128-128-128V192h-192l-128-128z" fill="#4D5152" p-id="8422"></path><path d="M512 320c105.888 0 192 86.112 192 192s-86.112 192-192 192-192-86.112-192-192 86.112-192 192-192m0-32a224 224 0 1 0 0 448 224 224 0 0 0 0-448z" fill="#4D5152" p-id="8423"></path></symbol><symbol id="icon-moon" viewBox="0 0 1024 1024"><path d="M611.370667 167.082667a445.013333 445.013333 0 0 1-38.4 161.834666 477.824 477.824 0 0 1-244.736 244.394667 445.141333 445.141333 0 0 1-161.109334 38.058667 85.077333 85.077333 0 0 0-65.066666 135.722666A462.08 462.08 0 1 0 747.093333 102.058667a85.077333 85.077333 0 0 0-135.722666 65.024z" fill="#FFB531" p-id="11345"></path><path d="M329.728 274.133333l35.157333-35.157333a21.333333 21.333333 0 1 0-30.165333-30.165333l-35.157333 35.157333-35.114667-35.157333a21.333333 21.333333 0 0 0-30.165333 30.165333l35.114666 35.157333-35.114666 35.157334a21.333333 21.333333 0 1 0 30.165333 30.165333l35.114667-35.157333 35.157333 35.157333a21.333333 21.333333 0 1 0 30.165333-30.165333z" fill="#030835" p-id="11346"></path></symbol></svg><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-categories-card@1.0.0/lib/categorybar.css"><link rel="stylesheet" href="https://unpkg.zhimg.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@1.0.17/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@1.0.17/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="scarecrow"><div class="scarecrow__hat"><div class="scarecrow__ribbon"></div></div><div class="scarecrow__head"><div class="scarecrow__eye"></div><div class="scarecrow__eye"></div><div class="scarecrow__mouth"></div><div class="scarecrow__pipe"></div></div><div class="scarecrow__body"><div class="scarecrow__glove scarecrow__glove--l"></div><div class="scarecrow__sleeve scarecrow__sleeve--l"></div><div class="scarecrow__bow"></div><div class="scarecrow__shirt"></div><div class="scarecrow__coat"></div><div class="scarecrow__waistcoat"></div><div class="scarecrow__sleeve scarecrow__sleeve--r"></div><div class="scarecrow__glove scarecrow__glove--r"></div><div class="scarecrow__coattails"></div><div class="scarecrow__pants"></div></div><div class="scarecrow__arms"></div><div class="scarecrow__leg">  </div></div></div><div id="web_bg"></div><div id="an_music_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://pic.imgdb.cn/item/64baa3da1ddac507ccec0e8f.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">39</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw icon-renzheng"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw icon-yuan_feidie"></i><span> 足迹</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fa-solid fa-box-archive"></i><span> 时间轴</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa-solid fa-list-check"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw icon-zhihangshu"></i><span> List</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/essay/"><i class="fa-fw icon-yuan_shouyinji"></i><span> 即刻短文</span></a></li><li><a class="site-page child" href="/video/"><i class="fa-fw icon-yuan_mianwan"></i><span> 视频</span></a></li><li><a class="site-page child" href="/world/"><i class="fa-fw icon-yuan_feidie"></i><span> 读世界</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw icon-yuan_xinfeng-17"></i><span> Link</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://oss.gincode.icu/blog/gd03.jpg')"><div class="menu-container" id="menu-container"><div class="menu-item"><div class="menu-item-main"><a class="site-page faa-parent animated-hover" href="/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-renzheng"></use></svg><span> 主页</span></a></div><div class="menu-item-main has-child"><div class="menu-item-parent"><a class="site-page faa-parent animated-hover" href="javascript:void(0);"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-yuan_feidie"></use></svg><span> 足迹</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/archives/"><i class="fa-fw fa-solid fa-box-archive faa-tada"></i><span> 时间轴</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/tags/"><i class="fa-fw fa-solid fa-list-check faa-tada"></i><span> 标签</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open faa-tada"></i><span> 分类</span></a></div></div><div class="menu-item-main has-child"><div class="menu-item-parent"><a class="site-page faa-parent animated-hover" href="javascript:void(0);"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-zhihangshu"></use></svg><span> List</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/essay/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-yuan_shouyinji"></use></svg><span> 即刻短文</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/video/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-yuan_mianwan"></use></svg><span> 视频</span></a></div><div class="menu-item-child"><a class="faa-parent animated-hover site-page child" href="/world/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-yuan_feidie"></use></svg><span> 读世界</span></a></div></div><div class="menu-item-main"><a class="site-page faa-parent animated-hover" href="/link/"><svg class="icon faa-tada" aria-hidden="true"><use xlink:href="#icon-yuan_xinfeng-17"></use></svg><span> Link</span></a></div></div><div class="top-bar"><div class="message-container"><div class="message-item message-weather" onclick="btf.scrollToDest(0, 500)"><div class="message-weather-box" id="he-plugin-simple"></div></div><div class="message-item message-date" onclick="Navvisible()"><div class="message-date-box" id="message-date-box"></div><div class="message-title-box" id="message-title-box"><a id="site-name" title="欢迎光临，愿你有愉快的一天">书单</a></div></div><div class="message-item message-function"><div id="search-button"><a class="site-page social-icon search faa-parent animated-hover"><svg class="faa-tada icon" style="height:25px;width:25px" aria-hidden="true"><use xlink:href="#icon-yuan_kejian"></use></svg><span> Search</span></a></div><a class="icon-V hidden faa-parent animated-hover" onclick="switchNightMode()" title="Toggle Between Light And Dark Mode"><svg class="faa-tada" width="25" height="25" viewBox="0 0 1024 1024"><use id="modeicon" xlink:href="#icon-moon"></use></svg></a><div id="toggle-menu"><a class="site-page faa-parent animated-hover"><svg class="faa-tada icon" style="height:25px;width:25px" aria-hidden="true"><use xlink:href="#icon-multi-window-01"></use></svg></a></div></div></div></div><button class="active-button" onclick="Navvisible()"></button></div><div id="post-info"><h1 class="post-title">GZIP 的压缩原理与日常应用</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-09-01T07:21:51.000Z" title="Created 2024-09-01 15:21:51">2024-09-01</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2024-09-04T17:17:38.700Z" title="Updated 2024-09-05 01:17:38">2024-09-05</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%9D%82%E4%B8%83%E6%9D%82%E5%85%AB/">杂七杂八</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">2.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>7min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="GZIP 的压缩原理与日常应用"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><div class="poem-wrap"><div class="poem-border poem-left"></div><div class="poem-border poem-right"></div><h1>每日一句诗词</h1><p id="poem">loading...</p><p id="info">loading...</p></div><article class="post-content" id="article-container"><h2 id="GZIP-的压缩原理"><a href="#GZIP-的压缩原理" class="headerlink" title="GZIP 的压缩原理"></a>GZIP 的压缩原理</h2><p>Gzip是一种无损压缩工具，以将大块数据变得更小而闻名。</p>
+<blockquote>
+<p>Gzip 压缩的原理是通过去除数据中的冗余信息，使用较短的代码表示频繁出现的字符或字符序列，从而减小数据文件的大小。这种压缩算法通常用于减少存储空间需求和加快网络传输速度。</p>
+</blockquote>
+<h3 id="LZ777"><a href="#LZ777" class="headerlink" title="LZ777"></a>LZ777</h3><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/pics/image-20240905003956137.png" alt="image-20240905003956137"></p>
+<p>LZ77 的核心思路是如果一个串中有两个重复的串，<strong>那么只需要知道第一个串的内容和后面串相对于第一个串起始位置的距离 + 串的长度</strong>。</p>
+<p>比如： ABCDEFGABCDEFH → ABCDEFG(7,6)H。7 指的是往前第 7 个数开始，6 指的是重复串的长度，ABCDEFG(7,6)H 完全可以表示前面的串，并且是没有二义性的。</p>
+<p>LZ77 用 <a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?q=滑动窗口&amp;zhida_source=entity&amp;is_preview=1">滑动窗口</a>（sliding-window compression）来实现这个算法。具体思路是扫描头从串的头部开始扫描串，在扫描头的前面有一个长度为 N 的滑动窗口。如果发现扫描头处的串和窗口里的 <strong>最长匹配串</strong> 是相同的，则用（两个串之间的距离，串的长度）来代替后一个重复的串，同时还需要添加一个表示是真实串还是替换后的“串”的字节在前面以方便解压（此串需要在 真实串和替换“串” 之前都有存在）。</p>
+<p>例如：缓冲区字符（ABCB）在滑动窗口的位移6位置找到AB,成功匹配到短语AB,将ABC编码为(6,2,C)</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/pics/11345047-9216beb2bbb63b14.png" alt="img"></p>
+<h3 id="Huffman-Coding"><a href="#Huffman-Coding" class="headerlink" title="Huffman Coding"></a>Huffman Coding</h3><p>Huffman Coding 是大学课本中都会提到的算法。核心思路是通过构造 Huffman Tree 的方式给字符重新编码（核心是避免一个叶子的路径是另外一个叶子路径的前缀），以保证出现频路越高的字符占用的字节越少。</p>
+<p>哈夫曼树的应用很广，哈夫曼编码就是其在电讯通信中的应用之一。广泛地用于数据文件压缩的十分有效的编码方法。其压缩率通常在20%～90%之间。</p>
+<p>解压：Huffman Coding 之后需要维护一张 Huffman Map 表，来记录重新编码后的字符串，根据这张表，还原原始串也是非常高效的。</p>
+<blockquote>
+<p><strong>路径</strong>： 在一棵树中 ,从一个结点到另外一个结点的通路就称为 树的路径 .如图1.1 从根节点root到D节点之间的通路就是二叉树中的一条路径</p>
+</blockquote>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/pics/lhiq634h3jnbs_980d20b9b7dd4c1e8c7f107a6ec029ba.png" alt="img"></p>
+<h3 id="压缩核心之-Deflate"><a href="#压缩核心之-Deflate" class="headerlink" title="压缩核心之 Deflate"></a>压缩核心之 Deflate</h3><p><code>GZIP 的核心是</code> <code>Deflate</code>，在 <a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc1951">RFC 1951</a> 中被标准化，并且在当时作为 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/LZW">LZW</a> 的替代品有了非常广泛的使用。</p>
+<p><code>Deflate</code> 是一个同时使用 LZ77 与 Huffman Coding 的算法.</p>
+<p>如果想探究加解密的原理请看：《数据压缩技术原理与范例》</p>
+<h2 id="http传输应用"><a href="#http传输应用" class="headerlink" title="http传输应用"></a>http传输应用</h2><p>在 <a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc2016">RFC 2016</a> 中 GZIP 已经成为了规定的三种标准HTTP压缩格式之一。目前绝大多数的网站都在使用 GZIP 传输 HTML、CSS、JavaScript 等资源文件。</p>
+<h3 id="nginx开启"><a href="#nginx开启" class="headerlink" title="nginx开启"></a>nginx开启</h3><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 开启</span></span><br><span class="line"><span class="attribute">gzip</span> <span class="literal">on</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 压缩等级，1-9。设置多少可以参考：http://serverfault.com/questions/253074/what-is-the-best-nginx-compression-gzip-level</span></span><br><span class="line"><span class="attribute">gzip_comp_level</span> <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># &quot;MSIE [1-6]\.&quot; 比如禁止 IE6 使用 GZIP</span></span><br><span class="line"><span class="attribute">gzip_disable</span> regex ...</span><br><span class="line"></span><br><span class="line"><span class="comment"># 最小压缩文件长度</span></span><br><span class="line">gzip_min_length <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 GZIP 压缩的最小 HTTP 版本</span></span><br><span class="line"><span class="attribute">gzip_http_version</span> <span class="number">1</span>.<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 压缩的文件类型，值是 [MIME type](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types)</span></span><br><span class="line"><span class="attribute">gzip_types</span> text/html;</span><br></pre></td></tr></table></figure>
+<p>打开浏览器，访问你的网站，看 Chrome 的 Network，点 use larger request row，如果 Size 上有两个不一样大小的体积（如：222KB 和 613KB），则代表 GZIP 已经成功开启。</p>
+<p>那浏览器又是如何和服务器配合的呢？</p>
+<p><a target="_blank" rel="noopener" href="https://user-images.githubusercontent.com/7554325/44306904-33f23500-a3cb-11e8-8eeb-9a1ce8af9f42.png"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/pics/44306904-33f23500-a3cb-11e8-8eeb-9a1ce8af9f42.png" alt="image"></a></p>
+<p>浏览器在请求资源的时候再 header 里面带上 <code>accept-encoding: gzip</code> 的参数。Nginx 在接收到 Header 之后，发现如果有这个配置，则发送 GZIP 之后的文件（返回的 header 里也包含相关的说明），如果没有则发送源文件。浏览器根据 response header 来处理要不要针对返回的文件进行解压缩然后展示。</p>
+<h2 id="缓存应用"><a href="#缓存应用" class="headerlink" title="缓存应用"></a>缓存应用</h2><p>我们在使用缓存中间件或者一些存储层的时候总会遇到存储的数据太庞大的问题。</p>
+<p>解决办法：<strong>分片、压缩</strong></p>
+<p>分片就不多说了。</p>
+<p>在java中有原生的GZIPInputStream实现，还可以使用Guava或者hutool去简单实现压缩。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> <span class="string">&quot;一般来说，gzip 压缩算法的目的是减少数据量，从而节省存储空间或提高传输效率。然而，在某些情况下，gzip 压缩后的文件或数据可能实际上会占据更大的存储空间。这通常涉及到以下几个因素：“&quot;</span>+ <span class="string">&quot;数据的特性“、“压缩级别”、“上下文和字典”和“文件系统开销”。&quot;</span>+</span><br><span class="line"><span class="string">&quot;压缩级别gzip 压缩算法通常允许用户指定压缩级别，这决定了压缩的程度。更高的压缩级别意味着更高的压缩比，但同时也需要更多的计算资源和时间。如果选择了低压缩级别，或者没有根据数据特点选择合适的压缩级别，可能无法实现期望的存储节省。上下文和字典gzip 算法依赖于上下文和字典来压缩数据。如果数据中缺乏足够的重复模式或上下文信息，gzip 可能无法构建有效的字典，从而无法达到良好的压缩效果。文件系统开销在某些文统，文件的存储方式和文件系统的开销可能影响文件的总大小。例如，文件系统中的文件分配单元大小、元数据开销或碎片问题都可能导致实际存储的文件大小超过其内容本身的大小。要减少 gzip 压缩后文件大小增加的可能性，可以考虑以下几点：选择适合的压缩级别，通常建议尝试不同级别以找到最佳平衡。对于已经高度压缩的数据格式，可以考虑使用专门为这些格式设计的其他压缩工具或算法。在压缩之前，对数据进行预处理，例如删除不需要的元数据或空白，以减少需要压缩的数据量。如果存储空间是主要考虑因素，可以使用更高效的压缩算法或工具，或者考虑使用不同的存储格式。如果文件系统开销是问题，可以尝试优化文件系统设置，例如选择合适的簇大小或进行文件系统碎片整理&quot;</span> +</span><br><span class="line"><span class="string">&quot;压缩级别gzip 压缩算法通常允许用户指定压缩级别，这决定了压缩的程度。更高的压缩级别意味着更高的压缩比，但同时也需要更多的计算资源和时间。如果选择了低压缩级别，或者没有根据数据特点选择合适的压缩级别，可能无法实现期望的存储节省。上下文和字典gzip 算法依赖于上下文和字典来压缩数据。如果数据中缺乏足够的重复模式或上下文信息，gzip 可能无法构建有效的字典，从而无法达到良好的压缩效果。文件系统开销在某些文统，文件的存储方式和文件系统的开销可能影响文件的总大小。例如，文件系统中的文件分配单元大小、元数据开销或碎片问题都可能导致实际存储的文件大小超过其内容本身的大小。要减少 gzip 压缩后文件大小增加的可能性，可以考虑以下几点：选择适合的压缩级别，通常建议尝试不同级别以找到最佳平衡。对于已经高度压缩的数据格式，可以考虑使用专门为这些格式设计的其他压缩工具或算法。在压缩之前，对数据进行预处理，例如删除不需要的元数据或空白，以减少需要压缩的数据量。如果存储空间是主要考虑因素，可以使用更高效的压缩算法或工具，或者考虑使用不同的存储格式。如果文件系统开销是问题，可以尝试优化文件系统设置，例如选择合适的簇大小或进行文件系统碎片整;</span></span><br><span class="line"><span class="string">        byte[] bytes = ZipUtil.gzip(s.getBytes());</span></span><br><span class="line"><span class="string">        System.out.println(bytes.length);</span></span><br><span class="line"><span class="string">        System.out.println(s.getBytes().length); //963</span></span><br><span class="line"><span class="string">        byte[] unGzip = ZipUtil.unGzip(bytes);//3379</span></span><br><span class="line"><span class="string">        System.out.println(new String(unGzip));</span></span><br><span class="line"><span class="string">    &#125;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p> 原始字符占<strong>3379</strong>字节压缩后占<strong>963</strong>字节，释放了将近<strong>70%</strong>的空间,</p>
+<p>我们简单了解原理后可以知道如果重复字符占比较多那么压缩效率会更大。</p>
+</blockquote>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><div class='anzhiyu-tag-link'><a class="tag-Link" target="_blank" href=" https://zhuanlan.zhihu.com/p/143459234">
+    <div class="tag-link-tips">引用站外地址</div>
+    <div class="tag-link-bottom">
+        <div class="tag-link-left" style="background-image: url(https://api.iowen.cn/favicon/zhihu.com.png);"></div>
+        <div class="tag-link-right">
+            <div class="tag-link-title">理解 zip 和 gzip 压缩格式背后的压缩算法</div>
+            <div class="tag-link-sitename"> https://zhuanlan.zhihu.com/p/143459234</div>
+        </div>
+        <i class="fa-solid fa-angle-right"></i>
+    </div>
+    </a></div>
+<div class='anzhiyu-tag-link'><a class="tag-Link" target="_blank" href=" https://github.com/rccoder/blog/issues/32">
+    <div class="tag-link-tips">引用站外地址</div>
+    <div class="tag-link-bottom">
+        <div class="tag-link-left" style="background-image: url(https://api.iowen.cn/favicon/github.com.png);"></div>
+        <div class="tag-link-right">
+            <div class="tag-link-title">rccoder</div>
+            <div class="tag-link-sitename"> https://github.com/rccoder/blog/issues/32</div>
+        </div>
+        <i class="fa-solid fa-angle-right"></i>
+    </div>
+    </a></div>
+</article><div class="post-copyright"><div class="post-copyright__title"><span class="post-copyright-info"><h>GZIP 的压缩原理与日常应用</h></span></div><div class="post-copyright-m"><div class="post-copyright-m-info"><div class="post-copyright-a"><h>作者</h><div class="post-copyright-cc-info"><h>Gin 琴酒</h></div></div><div class="post-copyright-c"><h>发布于</h><div class="post-copyright-cc-info"><h>2024-09-01</h></div></div><div class="post-copyright-u"><h>更新于</h><div class="post-copyright-cc-info"><h>2024-09-05</h></div></div><div class="post-copyright-c"><h>许可协议</h><div class="post-copyright-cc-info"><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a rel="noopener" target="_blank" title="CC BY-NC-SA 4.0" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></div></div></div><div class="tag_share"><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2024/08/31/ArrayList/DistributedID/"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd01.jpg" onerror="onerror=null;src='/img/404.png'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">分布式唯一ID</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2024/08/31/ArrayList/DistributedID/" title="分布式唯一ID"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd01.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-31</div><div class="title">分布式唯一ID</div></div></a></div><div><a href="/2024/08/12/ArrayList/work/desync/" title="java线上分析"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd28.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-12</div><div class="title">java线上分析</div></div></a></div><div><a href="/2024/06/17/ArrayList/work/work01/" title="实现产出 1： 场景优化"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd27.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-17</div><div class="title">实现产出 1： 场景优化</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div></div><div class="comment-wrap"><div><div id="waline-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://pic.imgdb.cn/item/64baa3da1ddac507ccec0e8f.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">panther</div><div class="widget widget_block card shadow-sm bg-white border-0"><p><a href="https://blog.gincode.icu/world" target="_self" rel="noopener">   <img class="za" decoding="async" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://pic.imgdb.cn/item/641295a0ebf10e5d5324e7a1.png" alt="60秒懂世界" title="60秒懂世界"/></a></p></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">39</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/panther125"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/panther125" target="_blank" title="Github"><i class="fa-fw fa-brands fa-github-alt"></i></a><a class="social-icon" href="mailto:2392189963@qq.com" target="_blank" title="Email"><i class="fa-fw fa-solid fa-envelope"></i></a><a class="social-icon" href="https://space.bilibili.com/322993153" target="_blank" title="Bilibili"><i class="fa-fw fa-brands fa-bilibili"></i></a><a class="social-icon" href="https://weibo.com/u/6401692308" target="_blank" title="weibo"><i class="fa-fw fa-brands fa-weibo"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#GZIP-%E7%9A%84%E5%8E%8B%E7%BC%A9%E5%8E%9F%E7%90%86"><span class="toc-number">1.</span> <span class="toc-text">GZIP 的压缩原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#LZ777"><span class="toc-number">1.1.</span> <span class="toc-text">LZ777</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Huffman-Coding"><span class="toc-number">1.2.</span> <span class="toc-text">Huffman Coding</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%8B%E7%BC%A9%E6%A0%B8%E5%BF%83%E4%B9%8B-Deflate"><span class="toc-number">1.3.</span> <span class="toc-text">压缩核心之 Deflate</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#http%E4%BC%A0%E8%BE%93%E5%BA%94%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">http传输应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#nginx%E5%BC%80%E5%90%AF"><span class="toc-number">2.1.</span> <span class="toc-text">nginx开启</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E5%BA%94%E7%94%A8"><span class="toc-number">3.</span> <span class="toc-text">缓存应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3"><span class="toc-number">4.</span> <span class="toc-text">参考文档</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/09/01/ArrayList/GzipRaw/" title="GZIP 的压缩原理与日常应用"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd03.jpg" onerror="this.onerror=null;this.src='/img/404.png'" alt="GZIP 的压缩原理与日常应用"/></a><div class="content"><a class="title" href="/2024/09/01/ArrayList/GzipRaw/" title="GZIP 的压缩原理与日常应用">GZIP 的压缩原理与日常应用</a><time datetime="2024-09-01T07:21:51.000Z" title="Created 2024-09-01 15:21:51">2024-09-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/08/31/ArrayList/DistributedID/" title="分布式唯一ID"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd01.jpg" onerror="this.onerror=null;this.src='/img/404.png'" alt="分布式唯一ID"/></a><div class="content"><a class="title" href="/2024/08/31/ArrayList/DistributedID/" title="分布式唯一ID">分布式唯一ID</a><time datetime="2024-08-31T07:21:51.000Z" title="Created 2024-08-31 15:21:51">2024-08-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/08/16/ArrayList/safeAndCron/" title="网站推荐和动态定时任务"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd29.jpg" onerror="this.onerror=null;this.src='/img/404.png'" alt="网站推荐和动态定时任务"/></a><div class="content"><a class="title" href="/2024/08/16/ArrayList/safeAndCron/" title="网站推荐和动态定时任务">网站推荐和动态定时任务</a><time datetime="2024-08-16T07:21:51.000Z" title="Created 2024-08-16 15:21:51">2024-08-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/08/12/ArrayList/work/desync/" title="java线上分析"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd28.jpg" onerror="this.onerror=null;this.src='/img/404.png'" alt="java线上分析"/></a><div class="content"><a class="title" href="/2024/08/12/ArrayList/work/desync/" title="java线上分析">java线上分析</a><time datetime="2024-08-12T07:21:51.000Z" title="Created 2024-08-12 15:21:51">2024-08-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/06/17/ArrayList/work/work01/" title="实现产出 1： 场景优化"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/gd27.jpg" onerror="this.onerror=null;this.src='/img/404.png'" alt="实现产出 1： 场景优化"/></a><div class="content"><a class="title" href="/2024/06/17/ArrayList/work/work01/" title="实现产出 1： 场景优化">实现产出 1： 场景优化</a><time datetime="2024-06-17T07:21:51.000Z" title="Created 2024-06-17 15:21:51">2024-06-17</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer_deal"><a class="deal_link" href="#" title="mail"><i class="iconfont icon-mail"></i></a><a class="deal_link" href="https://space.bilibili.com/322993153?spm_id_from=333.1007.0.0" title="bilibili" target="_blank"><i class="iconfont icon-bilibili"></i></a><a class="deal_link" href="https://weibo.com/u/6401692308" title="微博" target="_blank"><i class="iconfont icon-weibo1"></i></a><a class="deal_link" href="https://github.com/panther125" title="github" target="_blank"><i class="iconfont icon-github1"></i></a><img class="footer_mini_logo entered loading" style="border-radius:50%" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://oss.gincode.icu/blog/stormtroopocat.png" onclick="btf.scrollToDest(0,500)" title="返回顶部"/><a class="deal_link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/huan-yan-20-44" title="知乎"><i class="iconfont icon-zhihu-circle-fill"></i></a><a class="deal_link" href="https://leetcode.cn/u/gin-qin-jiu/" title="Leetcode" target="_blank"><i class="iconfont icon-leetcode"></i></a><a class="deal_link" href="" title="Twitter" target="_blank"><i class="iconfont icon-twitter"></i></a><a class="deal_link" href="" title="Telegram" target="_blank"><i class="iconfont icon-telegram"></i></a></div><div id="footer-wrap"><div class="copyright">&copy;2021 - 2024 By panther</div><div class="wordcount"><span>Gin 琴酒居然写了 93.4k 字  </span><span>好像写完一本 林海音 的 《城南旧事》 了啊</span></div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><a class="icon-V hidden" onclick="switchNightMode()" title="Toggle Between Light And Dark Mode"><svg width="25" height="25" viewBox="0 0 1024 1024"><use id="modeicon" xlink:href="#icon-moon"></use></svg></a><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="to_comment" type="button" title="Scroll To Comments" onclick="FixedCommentBtn();"><i class="fas fa-comments"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/vanilla-lazyload/17.3.1/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function loadWaline () {
+  function insertCSS () {
+    const link = document.createElement("link")
+    link.rel = "stylesheet"
+    link.href = "https://cdn.jsdelivr.net/npm/@waline/client/dist/waline.min.css"
+    document.head.appendChild(link)
+  }
+
+  function initWaline () {
+    const waline = Waline.init(Object.assign({
+      el: '#waline-wrap',
+      serverURL: 'www.gincode.eu.org',
+      pageview: false,
+      dark: 'html[data-theme="dark"]',
+      path: window.location.pathname,
+      comment: false,
+    }, null))
+  }
+
+  if (typeof Waline === 'function') initWaline()
+  else {
+    insertCSS()
+    getScript('https://cdn.jsdelivr.net/npm/@waline/client/dist/waline.min.js').then(initWaline)
+  }
+}
+
+if ('Waline' === 'Waline' || !true) {
+  if (true) btf.loadComment(document.getElementById('waline-wrap'),loadWaline)
+  else setTimeout(loadWaline, 0)
+} else {
+  function loadOtherComment () {
+    loadWaline()
+  }
+}</script></div><script data-pjax defer src="/js/custom/fixed_comment.js"></script><script async src="/js/diytitle.js"></script><script data-pjax src="/js/sun_moon.js" async></script><script async data-pjax src="/js/custom/nav.js"></script><script>WIDGET = {"CONFIG":{"modules":"012","background":"5","tmpColor":"FFFFFF","tmpSize":"16","cityColor":"FFFFFF","citySize":"16","aqiColor":"FFFFFF","aqiSize":"16","weatherIconSize":"24","alertIconSize":"18","padding":"10px 10px 10px 10px","shadow":"0","language":"auto","fixed":"false","vertical":"top","horizontal":"left","key":"49d571ee395448f89a68f7dace9dc11c"}}</script><script async data-pjax src="/js/custom/anzhiyu.js"></script><script async src="//at.alicdn.com/t/c/font_3423218_evl53i0ms0o.js"></script><script data-pjax src="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/js/swiper.min.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/naokuo-blog@1.2.2/css/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://oss.gincode.icu/APlayer.min.js"></script><script src="https://npm.elemecdn.com/hexo-anzhiyu-music@1.0.1/assets/js/Meting2.min.js"></script><script src="https://lib.baomitu.com/pjax/0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+    function butterfly_categories_card_injector_config(){
+      var parent_div_git = document.getElementById('recent-posts');
+      var item_html = '<style>li.categoryBar-list-item{width:32.3%;}.categoryBar-list{max-height: 380px;overflow:auto;}.categoryBar-list::-webkit-scrollbar{width:0!important}@media screen and (max-width: 650px){.categoryBar-list{max-height: 320px;}}</style><div class="recent-post-item" style="height:auto;width:100%;padding:0px;"><div id="categoryBar"><ul class="categoryBar-list"><li class="categoryBar-list-item" style="background:url(https://oss.gincode.icu/blog/gd05.jpg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/杂七杂八/&quot;);" href="javascript:void(0);">杂七杂八</a><span class="categoryBar-list-count">15</span><span class="categoryBar-list-descr">杂七杂八</span></li><li class="categoryBar-list-item" style="background:url(https://oss.gincode.icu/blog/gd06.jpg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/Java框架/&quot;);" href="javascript:void(0);">Java框架</a><span class="categoryBar-list-count">4</span><span class="categoryBar-list-descr">Java学习笔记</span></li><li class="categoryBar-list-item" style="background:url(https://oss.gincode.icu/blog/gd07.jpg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/Java基础/&quot;);" href="javascript:void(0);">Java基础</a><span class="categoryBar-list-count">6</span><span class="categoryBar-list-descr">基于Java的数据结构</span></li><li class="categoryBar-list-item" style="background:url(https://oss.gincode.icu/blog/gd09.jpg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/工具使用/&quot;);" href="javascript:void(0);">工具使用</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr">算法基础</span></li><li class="categoryBar-list-item" style="background:url(https://oss.gincode.icu/blog/gd10.jpg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/mySQL/&quot;);" href="javascript:void(0);">mySQL</a><span class="categoryBar-list-count">6</span><span class="categoryBar-list-descr">MySQL</span></li><li class="categoryBar-list-item" style="background:url(https://oss.gincode.icu/blog/gd04.jpg);"> <a class="categoryBar-list-link" onclick="pjax.loadUrl(&quot;categories/算法/&quot;);" href="javascript:void(0);">算法</a><span class="categoryBar-list-count">5</span><span class="categoryBar-list-descr">工具使用</span></li></ul></div></div>';
+      console.log('已挂载butterfly_categories_card')
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+      }
+    if( document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    butterfly_categories_card_injector_config()
+    }
+  </script><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --></body></html>
